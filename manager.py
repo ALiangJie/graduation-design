@@ -5,42 +5,16 @@
 3.session配置
 4.csrf配置
 """
-from datetime import timedelta
-
 from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_session import Session
 from flask_wtf.csrf import CSRFProtect
+from config import Config
 
 app = Flask(__name__)
 
-
-# 设置配置信息
-class Config(object):
-    # 1.调试配置信息
-    DEBUG = True
-    SECRET_KEY = "efsfsfsfef"
-
-    # 2.数据库配置信息
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost:3306/infoVirus"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    # 3.Redis配置信息
-    REDIS_HOST = "127.0.0.1"
-    REDIS_PORT = 6379
-
-    # 4.Session配置信息
-    # 4.1设置Session存储类型
-    SESSION_TYPE = "redis"
-    # 4.2指定session存储的redis服务器
-    SESSION_PERMANENT = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
-    # 4.3设置签名存储
-    SESSION_USE_SIGNER = True
-    # 4.4设置session有效期
-    PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
-
-
+# 加载配置类
 app.config.from_object(Config)
 
 # 创建SQLAlchemy对象，关联app
