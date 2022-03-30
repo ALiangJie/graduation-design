@@ -5,6 +5,7 @@
 3.session配置
 4.csrf配置
 """
+import logging
 from datetime import timedelta
 from redis.client import StrictRedis
 
@@ -33,6 +34,9 @@ class Config(object):
     # 4.4设置session有效期
     PERMANENT_SESSION_LIFETIME = timedelta(seconds=10)
 
+    # 5.默认日志级别
+    LEVEL_NAME = logging.DEBUG
+
 
 # 开发环境配置信息
 class DevelopConfig(Config):
@@ -42,7 +46,7 @@ class DevelopConfig(Config):
 # 生产(线上)环境配置信息
 class ProductConfig(Config):
     DEBUG = False
-    # LEVEL_NAME = logging.ERROR
+    LEVEL_NAME = logging.ERROR
 
 
 # 测试环境配置信息
