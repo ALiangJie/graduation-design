@@ -65,7 +65,7 @@ CSRFProtect(app)
 # session["name"] = "zhangsan"
 # print(session.get("name"))
 
-@app.route('/')
+@app.route('/', methods=["POST", "GET"])
 def hello_world():
     return "helloworld"
 
