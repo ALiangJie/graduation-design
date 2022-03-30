@@ -1,3 +1,10 @@
+"""
+相关配置信息
+1.数据库配置
+2.redis配置
+3.session配置
+4.csrf配置
+"""
 from datetime import timedelta
 from redis.client import StrictRedis
 
