@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
 
+
 def set_option():
     """
     谷歌浏览器常规反反爬的参数设置
@@ -36,7 +37,7 @@ if __name__ == '__main__':
         port=3306,
         user="root",
         password="123456",
-        database="info36",
+        database="infoVirus",
         charset="utf8"
     )
 
@@ -44,13 +45,8 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     create_time = ''
     update_time = ''
-    clicks = '0'
-    category_id = '3'
+    category_id = '2'
     success_count = 1
-    index_image_url = ''
-    user_id = None
-    status = '0'
-    reason = ''
 
     # 让selenium规避被检测到的风险
     bro = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options, options=option)
@@ -69,9 +65,8 @@ if __name__ == '__main__':
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     }
 
-    start_page = 6
-    for page_num in range(start_page, 10):
-        # 模拟浏览器换页
+    start_page = 1
+    for page_num in range(start_page, 6):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno').click()
         bro.find_element_by_id('pageno').clear()
@@ -85,9 +80,12 @@ if __name__ == '__main__':
         tr_list = cru_page_text.xpath('//*[@id="maincontent"]/div/div[5]/div')
         # 解析数据
         for tr in tr_list:
+            # 名字：// *[ @ id = "maincontent"] / div / div[5] / div[1] / div[2] / p / a
             virus_nucleotide_name = tr.xpath('./div[2]/p/a//text()')[0]
+            # 详情页面id号// *[ @ id = "maincontent"] / div / div[5] / div[1] / div[2] / div[2] / div / dl / dd[2]
             virus_nucleotide_id = tr.xpath('./div[2]/div[2]/div/dl/dd[2]/text()')[0]
-            virus_nucleotide_description = tr.xpath('./div[2]/div[1]/p/text()')[0]
+            # 来源id号// *[ @ id = "maincontent"] / div / div[5] / div[1] / div[2] / div[2] / div / dl / dd[1]
+            virus_nucleotide_source = tr.xpath('./div[2]/div[2]/div/dl/dd[1]/text()')[0]
 
             detail_url = init_url_first + virus_nucleotide_id + init_url_end
             response = requests.get(detail_url, headers=headers)  # 得到响应
@@ -98,21 +96,19 @@ if __name__ == '__main__':
             update_time = create_time
 
             # SQL 插入语句
-            sql = "insert into info_news (create_time, update_time, title, source, digest, content, clicks, index_image_url, category_id, user_id, status, reason) " \
-                  "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            sql = "insert into info_virus (create_time, update_time, title, source, content, category_id) " \
+                  "values (%s,%s,%s,%s,%s,%s)"
             # 执行SQL语句
-            cursor.execute(sql,
-                           [create_time, update_time, virus_nucleotide_name, virus_nucleotide_id,
-                            virus_nucleotide_description, content,
-                            clicks, index_image_url, category_id, user_id, status, reason])
+            cursor.execute(sql, [create_time, update_time, virus_nucleotide_name, virus_nucleotide_source, content,
+                                 category_id])
             # 提交事务
             conn.commit()
             print("插入第", success_count, "组数据成功！")
-            print(virus_nucleotide_name,virus_nucleotide_id,virus_nucleotide_description,content)
-            input()
             success_count += 1
-        print("爬取第" + str(page_num) + "页完成！")
 
+            # print("名称：" + virus_nucleotide_name, "来源id：" + virus_nucleotide_source)
+            # input()
+        print("爬取第" + str(page_num) + "页完成！")
 
     # 关闭数据库连接
     cursor.close()

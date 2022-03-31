@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 import os
 from Bio import Entrez
 
+
 def set_option():
     """
     谷歌浏览器常规反反爬的参数设置
@@ -38,7 +39,7 @@ if __name__ == '__main__':
         port=3306,
         user="root",
         password="123456",
-        database="info36",
+        database="infoVirus",
         charset="utf8"
     )
 
@@ -46,13 +47,8 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     create_time = ''
     update_time = ''
-    clicks = '0'
-    category_id = '4'
+    category_id = '3'
     success_count = 1
-    index_image_url = ''
-    user_id = None
-    status = '0'
-    reason = ''
 
     # 让selenium规避被检测到的风险
     bro = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options, options=option)
@@ -69,7 +65,7 @@ if __name__ == '__main__':
     headers = {
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     }
-    start_page = 4
+    start_page = 2
     for page_num in range(start_page, 6):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno2').click()
@@ -82,9 +78,13 @@ if __name__ == '__main__':
         tr_list = etree.HTML(bro.page_source).xpath('//*[@id="maincontent"]/div/div[5]/div')
         # 解析每一页的数据
         for tr in tr_list:
+            # //*[@id="maincontent"]/div/div[5]/div[1]/div[2]/p/a
             virus_protein_name = tr.xpath('./div[2]/p/a//text()')[0]
+            virus_protein_name = virus_protein_name[:-1] + ']'
+            # //*[@id="maincontent"]/div/div[5]/div[1]/div[2]/div[2]/div/dl/dd[2]
             virus_protein_id = tr.xpath('./div[2]/div[2]/div/dl/dd[2]/text()')[0]
-            virus_protein_description = tr.xpath('./div[2]/div[1]/p/text()')[0]
+            # //*[@id="maincontent"]/div/div[5]/div[1]/div[2]/div[2]/div/dl/dd[1]
+            virus_protein_source = tr.xpath('./div[2]/div[2]/div/dl/dd[1]/text()')[0]
 
             # # =====获取摘要=====
             # # 查询详细描述信息 | Esummary
@@ -102,17 +102,17 @@ if __name__ == '__main__':
             update_time = create_time
 
             # SQL 插入语句
-            sql = "insert into info_news (create_time, update_time, title, source, digest, content, clicks, index_image_url, category_id, user_id, status, reason) " \
-                  "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            sql = "insert into info_virus (create_time, update_time, title, source, content, category_id) " \
+                  "values (%s,%s,%s,%s,%s,%s)"
             # 执行SQL语句
             cursor.execute(sql,
-                           [create_time, update_time, virus_protein_name, virus_protein_id, virus_protein_description,
-                            content, clicks, index_image_url, category_id, user_id, status, reason])
+                           [create_time, update_time, virus_protein_name, virus_protein_source, content, category_id])
             # 提交事务
             conn.commit()
             print("插入第", success_count, "组数据成功！")
             success_count += 1
-            # print("名称：" + virus_protein_name, virus_protein_id, "简述：" + virus_protein_description + content)
+            print("名称：" + virus_protein_name, "访问id：" + virus_protein_id, "来源id：" + virus_protein_source, content)
+            input()
         time.sleep(3)
         print("爬取第" + str(page_num) + "页完成！")
 

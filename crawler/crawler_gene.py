@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
 
+
 def set_option():
     """
     谷歌浏览器常规反反爬的参数设置
@@ -22,7 +23,7 @@ def set_option():
     chrome_options.add_argument("--disable-gpu")
     # 实现规避检测
     option = ChromeOptions()
-    option.add_experimental_option("excludeSwitches",["enable-automation"])
+    option.add_experimental_option("excludeSwitches", ["enable-automation"])
     return chrome_options, option
 
 
@@ -36,7 +37,7 @@ if __name__ == '__main__':
         port=3306,
         user="root",
         password="123456",
-        database="info36",
+        database="infoVirus",
         charset="utf8"
     )
 
@@ -44,13 +45,8 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     create_time = ''
     update_time = ''
-    clicks = '0'
-    category_id = '2'
+    category_id = '1'
     success_count = 1
-    index_image_url = ''
-    user_id = None
-    status = '0'
-    reason = ''
     # 让selenium规避被检测到的风险
     bro = webdriver.Chrome(executable_path=executable_path, chrome_options=chrome_options, options=option)
     # 爬取的url主页
@@ -83,7 +79,6 @@ if __name__ == '__main__':
         for tr in tr_list:
             virus_gene_name = tr.xpath('./td[1]/div[2]/a//text()')[0]
             virus_gene_id = str(tr.xpath('./td[1]/span//text()')[0])
-            virus_gene_description = ''.join(tr.xpath('./td[2]//text()'))
 
             # 拼接url加上id
             detail_url = init_url + tr.xpath('.//a/@href')[0]
@@ -97,17 +92,16 @@ if __name__ == '__main__':
             create_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
             update_time = create_time
             # SQL 插入语句
-            sql = "insert into info_news (create_time, update_time, title, source, digest, content, clicks, index_image_url, category_id, user_id, status, reason) " \
-                  "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            sql = "insert into info_virus (create_time, update_time, title, source, content, category_id) " \
+                  "values (%s,%s,%s,%s,%s,%s)"
             # 执行SQL语句
-            cursor.execute(sql,
-                           [create_time, update_time, virus_gene_name, virus_gene_id, virus_gene_description, content,
-                            clicks, index_image_url, category_id, user_id, status, reason])
+            cursor.execute(sql, [create_time, update_time, virus_gene_name, virus_gene_id, content, category_id])
             # 提交事务
             conn.commit()
             print("插入第", success_count, "组数据成功！")
             success_count += 1
-            # print("名称：" + virus_gene_name, virus_gene_id, "简述：" + virus_gene_description + content)
+            # print("名称：" + virus_gene_name, virus_gene_id, "来源id：" + virus_gene_id + content)
+            # input()
         print("爬取第" + str(page_num) + "页完成！")
         time.sleep(5)
     # 关闭数据库连接
