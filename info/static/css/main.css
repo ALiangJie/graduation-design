@@ -68,7 +68,7 @@ body {
 
 .user_login {
     height: 30px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin-top: 15px;
     display: block;
 }
@@ -349,7 +349,7 @@ body {
 }
 
 
-.register_form_con {
+.register_form_con, .login_form_con {
     display: none;
 }
 
@@ -400,7 +400,7 @@ body {
 .login_title a, .register_title a {
     width: 16px;
     height: 16px;
-    background: url(../images/shutoff.png) left top no-repeat;
+    background: url(../img/shutoff.png) left top no-repeat;
     font-weight: normal;
     color: #999;
     position: absolute;
@@ -409,7 +409,7 @@ body {
 }
 
 .login_title a:hover, .register_title a:hover {
-    background: url(../images/shutoff.png) right top no-repeat;
+    background: url(../img/shutoff.png) right top no-repeat;
 }
 
 .form_group {

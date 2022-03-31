@@ -51,16 +51,19 @@ class User(BaseModel, db.Model):
                                 backref=db.backref('followed', lazy='dynamic'),
                                 lazy='dynamic')
 
-    # 密码加密处理
+    # 密码加密处理，可以当成属性使用
     @property
     def password(self):
         raise AttributeError("当前属性不可读")
 
+    # 给@password.setter给password方法加了一个设置方法
     @password.setter
     def password(self, value):
+        # 使用系统的generate_password_hash方法，sha256算法加密
         self.password_hash = generate_password_hash(value)
 
-    def check_passowrd(self, password):
+    def check_password(self, password):
+        # 系统提供的校验密码的方法，check_password_hash，传递密文和明文，返回的是True或FALSE
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):

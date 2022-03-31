@@ -142,7 +142,9 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
                 success: function (resp) {
                     //判断是否登陆成功
                     if (resp.errno == '0') {
-                        window.location.reload()
+                        layer.msg('登录成功！', function () {
+                            window.location.reload();
+                        });
                     } else {
                         alert(resp.errmsg);
                     }
@@ -171,14 +173,16 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
                 return;
             }
             if (!password) {
-                $("#register-password-err").html("请填写密码!");
-                $("#register-password-err").show();
+                // $("#register-password-err").html("请填写密码!");
+                // $("#register-password-err").show();
+                layer.msg('请填写密码!');
                 return;
             }
 
             if (password.length < 6) {
-                $("#register-password-err").html("密码长度不能少于6位");
-                $("#register-password-err").show();
+                // $("#register-password-err").html("密码长度不能少于6位");
+                // $("#register-password-err").show();
+                layer.msg('密码长度不能少于6位!');
                 return;
             }
 
@@ -199,8 +203,10 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
                 success: function (resp) {
                     //判断是否注册成功
                     if (resp.errno == '0') {
-                        //重新加载当前页面
-                        window.location.reload()
+                        //刷新
+                        layer.msg('注册成功！请登录！', function () {
+                            window.location.reload();
+                        });
                     } else {
                         alert(resp.errmsg);
                     }
@@ -323,7 +329,7 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
     }
 
     // 一般页面的iframe的高度是660
-    // 新闻发布页面iframe的高度是900
+    // 页面iframe的高度是900
     function fnSetIframeHeight(num) {
         var $frame = $('#main_frame');
         $frame.css({'height': num});
