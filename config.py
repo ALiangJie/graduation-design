@@ -14,11 +14,12 @@ from redis.client import StrictRedis
 class Config(object):
     # 1.调试配置信息
     DEBUG = True
-    SECRET_KEY = "efsfsfsfef"
+    SECRET_KEY = "dwafawsfrdgtrstgrfd"
 
     # 2.数据库配置信息
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost:3306/infoVirus"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True  # 每当改变数据的内容之后，在视图函数结束时都会自动提交
 
     # 3.Redis配置信息
     REDIS_HOST = "127.0.0.1"
