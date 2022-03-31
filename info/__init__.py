@@ -40,10 +40,16 @@ def create_app(config_name):
     # 使用CSRFProtect保护app，验证机制，防止CSRF攻击，['POST', 'PUT', 'PATCH', 'DELETE']
     CSRFProtect(app)
 
+    # 将首页蓝图index_blue,注册到app中
     from info.modules.index import index_blue
-    # 将首页蓝图index_app,注册到app中
     app.register_blueprint(index_blue)
 
+    # 将认证蓝图passport_blue,注册到app中
+    from info.modules.passport import passport_blue
+    app.register_blueprint(passport_blue)
+
+    # 打印路径进行测试
+    print(app.url_map)
     return app
 
 
