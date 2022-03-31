@@ -38,7 +38,7 @@ def create_app(config_name):
     Session(app)
 
     # 使用CSRFProtect保护app，验证机制，防止CSRF攻击，['POST', 'PUT', 'PATCH', 'DELETE']
-    CSRFProtect(app)
+    # CSRFProtect(app)
 
     # 将首页蓝图index_blue,注册到app中
     from info.modules.index import index_blue

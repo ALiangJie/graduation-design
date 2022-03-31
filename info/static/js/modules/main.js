@@ -242,7 +242,7 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
     }
 
     // 发送短信验证码
-    function sendSMSCode() {
+    window.sendSMSCode = function () {
         // 校验参数，保证输入框有数据填写
         //移除按钮点击事件
         $(".get_code").removeAttr("onclick");
