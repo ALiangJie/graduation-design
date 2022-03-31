@@ -111,8 +111,8 @@ if __name__ == '__main__':
             conn.commit()
             print("插入第", success_count, "组数据成功！")
             success_count += 1
-            print("名称：" + virus_protein_name, "访问id：" + virus_protein_id, "来源id：" + virus_protein_source, content)
-            input()
+            # print("名称：" + virus_protein_name, "访问id：" + virus_protein_id, "来源id：" + virus_protein_source, content)
+            # input()
         time.sleep(3)
         print("爬取第" + str(page_num) + "页完成！")
 
