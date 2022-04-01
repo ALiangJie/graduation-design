@@ -216,13 +216,15 @@ layui.define(["layer", "form", "jquery", "element", "laydate"], function (export
     })
 
     //退出登陆
-    function logout() {
+    window.logout = function () {
         $.ajax({
             url: '/passport/logout',
             type: 'post',
             headers: {'X-CSRFToken': getCookie('csrf_token')},
             success: function (resp) {
-                window.location.reload()
+                layer.msg('已退出！', function () {
+                    window.location.reload();
+                });
             }
         })
     }

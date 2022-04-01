@@ -11,7 +11,7 @@
 <body>
 
 <div class="layui-layout layui-layout-admin">
-    <!-- 头部区域（可配合layui 已有的水平导航） -->
+    <!-- 头部区域 -->
     <div class="layui-header">
         <div>
             <a class="layui-logo layui-hide-xs layui-bg-black" href="#">主页</a>
@@ -22,9 +22,9 @@
                 <li class="layui-nav-item">
                     <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">{{ data.user_info.nick_name }}</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">修改信息</a></dd>
-                        <dd><a href="javascript:;">安全管理</a></dd>
-                        <dd><a href="javascript:;">退了</a></dd>
+                        <dd><a href="javascript:;">个人资料</a></dd>
+                        <dd><a href="javascript:;">修改密码</a></dd>
+                        <dd><a href="javascript:;" onclick="logout()">退出登录</a></dd>
                     </dl>
                 </li>
             {% else %}
@@ -36,35 +36,12 @@
         </ul>
     </div>
 
-    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <ul class="layui-nav layui-nav-tree">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">用户操作</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">查询数据</a></dd>
-                        <dd><a href="javascript:;">数据可视化</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="javascript:;">NCBI链接</a></li>
-            </ul>
-        </div>
-    </div>
 
-    <!-- 内容主体区域 -->
-    <div class="layui-body">
-
-    </div>
-
-    <!-- 底部固定区域 -->
-    <div class="layui-footer">
-        底部区域
-    </div>
 </div>
 
+<!-- 登录表单 -->
 <div class="user-login-background">
-    <!-- 登录表单 -->
+
     <form class="layui-form login_form_con">
         <div class="login_form">
             <div class="login_title">
@@ -88,8 +65,8 @@
     </form>
 </div>
 
+<!-- 注册表单 -->
 <div class="user-register-background">
-    <!-- 注册表单 -->
     <form class="layui-form register_form_con">
         <div class="register_form">
             <div class="register_title">

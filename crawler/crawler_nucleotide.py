@@ -66,7 +66,7 @@ if __name__ == '__main__':
     }
 
     start_page = 1
-    for page_num in range(start_page, 6):
+    for page_num in range(start_page, 3):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno').click()
         bro.find_element_by_id('pageno').clear()
