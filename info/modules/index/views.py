@@ -31,7 +31,7 @@ def virus_list():
     # 3. 分页查询病毒数据
     try:
         # 判断是否带有填写搜索关键字
-        filters=[]
+        filters = []
         if keywords:
             filters.append(Virus.title.contains(keywords))
 
@@ -88,9 +88,15 @@ def user_login_show():
 
 
 # 欢迎页面显示
-@index_blue.route('/user_welcome', methods=["POST", "GET"])
+@index_blue.route('/user_welcome', methods=["GET"])
 def user_welcome_index_show():
     return render_template("user_welcome.html")
+
+
+# 显示首页欢迎界面
+@index_blue.route('/welcome_index', methods=["GET"])
+def welcome_index_show():
+    return render_template("welcome_index.html")
 
 
 # 处理网站favicon.ico

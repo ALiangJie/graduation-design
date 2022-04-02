@@ -1,10 +1,10 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "user_welcome"
+    "href": "welcome_index"
   },
   "logoInfo": {
-    "title": "病毒数据",
+    "title": "病毒数据系统",
     "image": "./images/logo.png",
     "href": ""
   },
@@ -29,7 +29,7 @@
             },
             {
               "title": "数据可视化",
-              "href": "page/welcome-3.html",
+              "href": "user_welcome",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
