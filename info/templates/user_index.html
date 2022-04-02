@@ -57,23 +57,31 @@
                 <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
-                <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:;">admin</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" layuimini-content-href="page/user-password.html" data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
-                        </dd>
-                        <dd>
-                            <hr>
-                        </dd>
-                        <dd>
-                            <a href="javascript:;" class="login-out">退出登录</a>
-                        </dd>
-                    </dl>
-                </li>
+                {% if data.user_info %}
+                    <li class="layui-nav-item layuimini-setting">
+                        <a href="javascript:;">{{ data.user_info.nick_name }}</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
+                                   data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" layuimini-content-href="page/user-password.html"
+                                   data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                            </dd>
+                            <dd>
+                                <hr>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" class="login-out">退出登录</a>
+                            </dd>
+                        </dl>
+                    </li>
+                {% else %}
+                    <li class="layui-nav-item layuimini-setting">
+                        <a href="/">登录</a>
+                    </li>
+                {% endif %}
                 <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
                     <a href="javascript:;" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>
                 </li>
@@ -97,7 +105,6 @@
     <div class="layuimini-site-mobile"><i class="layui-icon"></i></div>
 
     <div class="layui-body">
-
         <div class="layuimini-tab layui-tab-rollTool layui-tab" lay-filter="layuiminiTab" lay-allowclose="true">
             <ul class="layui-tab-title">
                 <li class="layui-this" id="layuiminiHomeTabId" lay-id=""></li>
@@ -122,21 +129,20 @@
                 <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show"></div>
             </div>
         </div>
-
     </div>
 </div>
-<script src="lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../static/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
-    layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
+    layui.use(['jquery', 'layer', 'miniAdmin', 'miniTongji'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
             miniAdmin = layui.miniAdmin,
             miniTongji = layui.miniTongji;
 
         var options = {
-            iniUrl: "api/init.json",    // 初始化接口
-            clearUrl: "api/clear.json", // 缓存清理接口
+            iniUrl: "../static/api/init.json",    // 初始化接口
+            clearUrl: "../static/api/clear.json", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
             multiModule: true,          // 是否开启多模块
@@ -146,16 +152,6 @@
             maxTabNum: 20,              // 最大的tab打开数量
         };
         miniAdmin.render(options);
-
-        // 百度统计代码，只统计指定域名
-        miniTongji.render({
-            specific: true,
-            domains: [
-                '99php.cn',
-                'layuimini.99php.cn',
-                'layuimini-onepage.99php.cn',
-            ],
-        });
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {
