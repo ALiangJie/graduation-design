@@ -6,7 +6,7 @@ from flask import render_template, current_app, session, request, jsonify
 # 病毒数据的显示
 # 请求路径: /virus_table
 # 请求方式: GET
-# 请求参数: cid,page,per_page
+# 请求参数: cid,page,per_page,keywords
 # 返回值: data数据
 @index_blue.route('/virus_list')
 def virus_list():
@@ -19,9 +19,9 @@ def virus_list():
        6. 拼接数据,渲染页面
        :return:
        """
-    # 1. 获取参数,p
+    # 1. 获取参数,p,keywords
     page = request.args.get("p", "1")
-
+    keywords = request.args.get("keywords", "")
     # 2. 参数类型转换
     try:
         page = int(page)
@@ -30,7 +30,12 @@ def virus_list():
 
     # 3. 分页查询病毒数据
     try:
-        paginate = Virus.query.filter().order_by(Virus.create_time.desc()).paginate(page, 10, False)
+        # 判断是否带有填写搜索关键字
+        filters=[]
+        if keywords:
+            filters.append(Virus.title.contains(keywords))
+
+        paginate = Virus.query.filter(*filters).order_by(Virus.create_time.desc()).paginate(page, 10, False)
     except Exception as e:
         current_app.logger.error(e)
         return render_template("virus_list.html")
