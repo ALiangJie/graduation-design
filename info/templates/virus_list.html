@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新经资讯后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../static/admin_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../static/admin_css/main.css">
+    <link rel="stylesheet" href="../static/admin_css/jquery.pagination.css">
+    <script type="text/javascript" src="../static/admin_js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../static/admin_js/jquery.pagination.min.js"></script>
+    <link rel="stylesheet" href="../static/lib/layui-v2.6.3/css/layui.css">
+
+</head>
+<body>
+
+<div class="pannel">
+    <table class="common_table">
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>NCBI来源ID</th>
+            <th>创建时间</th>
+            <th>分类</th>
+            <th>操作</th>
+        </tr>
+        {#遍历病毒数据#}
+        {% for virus in data.virus_list %}
+            <tr>
+                <td>{{ virus.id }}</td>
+                <td>{{ virus.title }}</td>
+                <td>{{ virus.source }}</td>
+                <td>{{ virus.create_time }}</td>
+                <td>{{ virus.category.name }}</td>
+                <td>
+                    <button type="button" class="layui-btn layui-btn-xs">查看详细</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="box">
+    <div id="pagination" class="page"></div>
+</div>
+
+<script>
+    $(function () {
+        $("#pagination").pagination({
+            currentPage: {{ data.currentPage }},
+            totalPage: {{ data.totalPage }},
+            callback: function (current) {
+                window.location.href = "/virus_list?p=" + current;
+            }
+        });
+    });
+</script>
+</body>
+</html>

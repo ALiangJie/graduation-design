@@ -23,13 +23,7 @@
           "child": [
             {
               "title": "查询病毒数据",
-              "href": "page/welcome-1.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "提出意见",
-              "href": "page/welcome-2.html",
+              "href": "virus_list",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -43,7 +37,7 @@
         },
         {
           "title": "友情链接",
-          "href": "page/menu.html",
+          "href": "",
           "icon": "fa fa-window-maximize",
           "target": "_self",
           "child": [

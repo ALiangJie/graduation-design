@@ -1,6 +1,57 @@
-from info.models import User
+from info.models import User, Virus
 from info.modules.index import index_blue
-from flask import render_template, current_app, session
+from flask import render_template, current_app, session, request, jsonify
+
+
+# 病毒数据的显示
+# 请求路径: /virus_table
+# 请求方式: GET
+# 请求参数: cid,page,per_page
+# 返回值: data数据
+@index_blue.route('/virus_list')
+def virus_list():
+    """
+       1. 获取参数,p
+       2. 参数类型转换
+       3. 分页查询病毒数据
+       4. 获取分页对象属性,总页数,当前页,当前页对象列表
+       5. 将对象列表,转成字典列表
+       6. 拼接数据,渲染页面
+       :return:
+       """
+    # 1. 获取参数,p
+    page = request.args.get("p", "1")
+
+    # 2. 参数类型转换
+    try:
+        page = int(page)
+    except Exception as e:
+        page = 1
+
+    # 3. 分页查询病毒数据
+    try:
+        paginate = Virus.query.filter().order_by(Virus.create_time.desc()).paginate(page, 10, False)
+    except Exception as e:
+        current_app.logger.error(e)
+        return render_template("virus_list.html")
+
+    # 4. 获取分页对象属性,总页数,当前页,当前页对象列表
+    totalPage = paginate.pages
+    currentPage = paginate.page
+    items = paginate.items
+
+    # 5. 将对象列表,转成字典列表
+    virus_list = []
+    for virus in items:
+        virus_list.append(virus.to_dict())
+
+    # 6. 拼接数据,渲染页面
+    data = {
+        "totalPage": totalPage,
+        "currentPage": currentPage,
+        "virus_list": virus_list
+    }
+    return render_template("virus_list.html", data=data)
 
 
 # 主页的用户显示

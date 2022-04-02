@@ -73,7 +73,7 @@
                                 <hr>
                             </dd>
                             <dd>
-                                <a href="javascript:;" class="login-out">退出登录</a>
+                                <a href="javascript:;" class="login-out" onclick="logout()">退出登录</a>
                             </dd>
                         </dl>
                     </li>
@@ -153,11 +153,25 @@
         };
         miniAdmin.render(options);
 
-        $('.login-out').on("click", function () {
-            layer.msg('退出登录成功', function () {
-                window.location = 'page/login-3.html';
-            });
-        });
+
+        //退出登录
+        window.logout = function logout() {
+            $.ajax({
+                url: '/passport/logout',
+                type: 'post',
+                headers: {'X-CSRFToken': getCookie('csrf_token')},
+                success: function (resp) {
+                    layer.msg('退出登录成功!', function () {
+                        window.location = '/';
+                    });
+                }
+            })
+        }
+        function getCookie(name) {
+            var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+            return r ? r[1] : undefined;
+        }
+
     });
 </script>
 </body>
