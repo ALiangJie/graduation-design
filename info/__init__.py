@@ -48,6 +48,10 @@ def create_app(config_name):
     from info.modules.passport import passport_blue
     app.register_blueprint(passport_blue)
 
+    # 将病毒蓝图virus_blue,注册到app中
+    from info.modules.virus import virus_blue
+    app.register_blueprint(virus_blue)
+
     # 使用请求钩子拦截所有的请求,统一的在cookie中设置csrf_token
     # @app.after_request
     # def after_request(resp):

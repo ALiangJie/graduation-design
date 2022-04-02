@@ -38,7 +38,7 @@
                 <td>{{ virus.create_time }}</td>
                 <td>{{ virus.category.name }}</td>
                 <td>
-                    <button type="button" class="layui-btn layui-btn-xs">查看详细</button>
+                    <button type="button" class="layui-btn layui-btn-xs"><a href="./virus/{{ virus.id }}">查看详细</a></button>
                 </td>
             </tr>
         {% endfor %}
@@ -59,6 +59,9 @@
             }
         });
     });
+
+
+
 </script>
 </body>
 </html>
