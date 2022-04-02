@@ -13,26 +13,6 @@ from info.response_code import RET
 from info.utils.captcha.captcha import captcha
 
 
-# 退出登陆
-# 请求路径: /passport/logout
-# 请求方式: POST
-# 请求参数: 无
-# 返回值: errno, errmsg
-@passport_blue.route('/logout', methods=['POST'])
-def logout():
-    """
-    1.清除session信息
-    2.返回响应
-    :return:
-    """
-    # 1.清除session信息
-    session.pop("user_id", None)
-    session.pop("is_admin", None)
-
-    # 2.返回响应
-    return jsonify(errno=RET.OK, errmsg="退出成功")
-
-
 # 登陆用户
 # 请求路径: /passport/login
 # 请求方式: POST
@@ -67,7 +47,7 @@ def login():
 
     # 4. 判断用户是否存在
     if not user:
-        return jsonify(errno=RET.NODATA, errmsg="该用户不存在，请注册！")
+        return jsonify(errno=RET.NODATA, errmsg="该用户不存在")
 
     # 5. 校验密码是否正确
     if not user.check_password(password):
@@ -162,7 +142,7 @@ def register():
         db.session.commit()
     except Exception as e:
         current_app.logger.error(e)
-        return jsonify(errno=RET.DBERR, errmsg="已经存在，用户注册失败")
+        return jsonify(errno=RET.DBERR, errmsg="用户已经存在，用户注册失败！")
 
     # 10. 返回响应
     return jsonify(errno=RET.OK, errmsg="注册成功")

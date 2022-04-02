@@ -14,7 +14,7 @@ from redis.client import StrictRedis
 class Config(object):
     # 1.调试配置信息
     DEBUG = True
-    SECRET_KEY = "dwafawsfrdgtrstgrfd"
+    SECRET_KEY = "dwafadwagtrstgrfd"
 
     # 2.数据库配置信息
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost:3306/infoVirus"
