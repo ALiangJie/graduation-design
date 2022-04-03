@@ -1,32 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../static/user_css/reset.css">
-	<link rel="stylesheet" type="text/css" href="../static/user_css/main.css">
-        <script type="text/javascript" src="../static/user_js/jquery-1.12.4.min.js"></script>
-    <script type="text/javascript" src="../static/user_js/user_pass_info.js"></script>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <link rel="stylesheet" type="text/css" href="../static/user_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../static/user_css/main.css">
+    <script type="text/javascript" src="../static/user_js/jquery-1.12.4.min.js"></script>
 </head>
 <body class="inframe_body">
-    <form class="pass_info">
-        <h3>密码修改</h3>
-        <div class="form-group">
-            <label>当前密码：</label>
-            <input type="password" name="old_password" class="input_txt">
-        </div>
-        <div class="form-group">
-            <label>新密码：</label>
-            <input type="password" name="new_password" class="input_txt">
-        </div>
-        <div class="form-group">
-            <label>确认密码：</label>
-            <input type="password" name="new_password2" class="input_txt">
-        </div>
-       <div class="error_tip">提示信息</div>
-        <div class="form-group">
-            <input type="submit" value="保 存" class="input_sub">
-        </div>
-    </form>
+<form class="pass_info">
+    <h3>密码修改</h3>
+    <div class="form-group">
+        <label>当前密码：</label>
+        <input type="password" name="old_password" class="input_txt">
+    </div>
+    <div class="form-group">
+        <label>新密码：</label>
+        <input type="password" name="user_password" class="input_txt">
+    </div>
+    <div class="form-group">
+        <label>确认密码：</label>
+        <input type="password" name="user_password2" class="input_txt">
+    </div>
+    <div class="error_tip">提示信息</div>
+    <div class="form-group">
+        <input type="submit" id="submit" value="保 存" class="input_sub">
+    </div>
+</form>
 </body>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+
+    $(function () {
+        $(".pass_info").submit(function (e) {
+            e.preventDefault();
+
+            var params = {};
+            //遍历获取表单内容
+            $(this).serializeArray().map(function (x) {
+                params[x.name] = x.value;
+            });
+            // 取到两次密码进行判断
+            var user_password = params["user_password"];
+            var user_password2 = params["user_password2"];
+
+            if (user_password != user_password2) {
+                alert('两次密码输入不一致')
+                return
+            }
+
+            // TODO 修改密码
+
+            $.ajax({
+                url: "/pass_info",
+                type: "post",
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": getCookie("csrf_token")
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno == "0") {
+                        // 修改成功
+                        alert("修改成功")
+                        window.location.reload()
+                    } else {
+                        alert(resp.errmsg)
+                    }
+                }
+            })
+
+        })
+    })
+</script>
 </html>

@@ -1,30 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../static/user_css/reset.css">
-	<link rel="stylesheet" type="text/css" href="../static/user_css/main.css">
+    <meta charset="UTF-8">
+    <title>用户基本资料</title>
+    <link rel="stylesheet" type="text/css" href="../static/user_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../static/user_css/main.css">
+    <script type="text/javascript" src="../static/user_js/jquery-1.12.4.min.js"></script>
 </head>
 <body class="inframe_body">
-    <form class="base_info">
-        <h3>基本资料</h3>
-        <div class="form-group">
-            <label>个性签名：</label>
-            <input id="signature" type="text" name="signature" class="input_txt">
-        </div>
-        <div class="form-group">
-            <label>用户昵称：</label>
-            <input id="nick_name" type="text" name="" class="input_txt">
-        </div>
-        <div class="form-group">
-            <label>性别：</label>
-            <input class="gender" type="radio" name="gender" checked="checked"> <b>男</b>&nbsp;&nbsp;&nbsp;&nbsp;
-            <input class="gender" type="radio" name="gender">  <b>女</b>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="保 存" class="input_sub">
-        </div>
-    </form>
+<form class="base_info">
+    <h3>基本资料</h3>
+    <div class="form-group">
+        <label>个性签名：</label>
+        <input id="signature" type="text" name="signature" class="input_txt" value="{{ user_info.signature }}">
+    </div>
+    <div class="form-group">
+        <label>用户昵称：</label>
+        <input id="nick_name" type="text" name="" class="input_txt" value="{{ user_info.nick_name }}">
+    </div>
+    <div class="form-group">
+        <label>性别：</label>
+        {# 判断用户性别 #}
+        {% if user_info.gender == "MAN" %}
+            <input class="gender" type="radio" name="gender" checked="checked" value="MAN"> <b>男</b>&nbsp;&nbsp;&nbsp;
+            &nbsp;
+            <input class="gender" type="radio" name="gender" value="WOMAN">  <b>女</b>
+        {% else %}
+            <input class="gender" type="radio" name="gender" value="MAN"> <b>男</b>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input class="gender" type="radio" name="gender" checked="checked" value="WOMAN"><b>女</b>
+        {% endif %}
+
+    </div>
+    <div class="form-group">
+        <input type="submit" id="submit" value="保 存" class="input_sub">
+    </div>
+</form>
 </body>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $(function () {
+        $('#submit').click(function () {
+            window.alert("信息修改成功！请刷新！");
+        })
+
+        $(".base_info").submit(function (e) {
+            e.preventDefault()
+
+            var signature = $("#signature").val();
+            var nick_name = $("#nick_name").val();
+            // var gender = $(".gender").val()
+            var gender = $(".base_info").find('input:radio:checked').val();
+
+
+            if (!nick_name) {
+                alert('请输入昵称')
+                return
+            }
+            if (!gender) {
+                alert('请选择性别')
+            }
+
+            // TODO 修改用户信息接口
+            var params = {
+                "signature": signature,
+                "nick_name": nick_name,
+                "gender": gender
+            }
+
+            $.ajax({
+                url: "/base_info",
+                type: "post",
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": getCookie("csrf_token")
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno == "0") {
+                        // 更新父窗口内容
+                        $('.user_center_name', parent.document).html(params['nick_name'])
+                        $('#nick_name', parent.document).html(params['nick_name'])
+                        $('.input_sub').blur()
+                        alert('信息修改成功！')
+                    } else {
+                        alert(resp.errmsg)
+                    }
+                }
+            })
+
+        })
+    })
+</script>
 </html>
