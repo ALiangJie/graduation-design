@@ -14,7 +14,7 @@ $(function(){
     // 收藏
     $(".collection").click(function () {
         /*
-        //获取到新闻编号
+        //获取到病毒数据编号
         var news_id = $(".collection").attr('data-newid');
         var action = "collect"
         var params = {
@@ -83,7 +83,7 @@ $(function(){
         // 评论提交
     $(".comment_form").submit(function (e) {
             e.preventDefault();
-            // 获取当前标签中的,新闻编号,评论内容
+            // 获取当前标签中的,病毒数据编号,评论内容
             var news_id = $(this).attr('data-newsid')
             var news_comment = $(".comment_input").val();
 
@@ -175,7 +175,7 @@ $(function(){
                 // 如果当前该评论已经是点赞状态，再次点击会进行到此代码块内，代表要取消点赞
                 action = "remove"
             }
-            //获取到当前点击的标签上面的, 评论编号, 新闻编号
+            //获取到当前点击的标签上面的, 评论编号, 病毒数据编号
             var comment_id = $(this).attr("data-commentid")
             // var news_id = $(this).attr("data-newsid")
             var params = {
@@ -306,7 +306,7 @@ $(function(){
         }
     })
 
-        // 关注当前新闻作者
+        // 关注当前病毒数据作者
     $(".focus").click(function () {
         /*
         var user_id = $(this).attr('data-userid')
@@ -342,7 +342,7 @@ $(function(){
         */
     })
 
-    // 取消关注当前新闻作者
+    // 取消关注当前病毒数据作者
     $(".focused").click(function () {
         /*
         var user_id = $(this).attr('data-userid')

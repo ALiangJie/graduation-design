@@ -7,7 +7,7 @@ function getCookie(name) {
 $(function () {
 
     $(".focused").click(function () {
-        // TODO 取消关注当前新闻作者
+        // TODO 取消关注当前病毒数据作者
         var user_id = $(this).attr('data-userid')
         var params = {
             "action": "unfollow",

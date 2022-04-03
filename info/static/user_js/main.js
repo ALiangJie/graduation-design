@@ -316,7 +316,7 @@ function fnChangeMenu(n) {
 }
 
 // 一般页面的iframe的高度是660
-// 新闻发布页面iframe的高度是900
+// 病毒数据发布页面iframe的高度是900
 function fnSetIframeHeight(num){
 	var $frame = $('#main_frame');
 	$frame.css({'height':num});

@@ -9,7 +9,7 @@ $(function () {
     $(".release_form").submit(function (e) {
         e.preventDefault()
 
-        // 发布新闻, ajaxSubmit属于表单提交
+        // 发布病毒数据, ajaxSubmit属于表单提交
         /*
         $(this).ajaxSubmit({
             //是为了处理富文本(可以有颜色,大小)

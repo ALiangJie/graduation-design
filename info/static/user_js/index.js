@@ -44,13 +44,13 @@ $(function () {
         var nowScroll = $(document).scrollTop();
 
         if ((canScrollHeight - nowScroll) < 100) {
-            // TODO 判断页数，去更新新闻数据
+            // TODO 判断页数，去更新病毒数据数据
             if (!house_data_querying) {
-                // 将`是否正在向后端查询新闻数据`的标志设置为真
+                // 将`是否正在向后端查询病毒数据数据`的标志设置为真
                 house_data_querying = true;
                 // 如果当前页面数还没到达总页数
                 if(cur_page < total_page) {
-                    // 向后端发送请求，查询下一页新闻数据
+                    // 向后端发送请求，查询下一页病毒数据数据
                     updateNewsData();
                 } else {
                     house_data_querying = false;
@@ -61,7 +61,7 @@ $(function () {
 })
 
 function updateNewsData() {
-    // TODO 更新新闻数据
+    // TODO 更新病毒数据数据
     var params = {
         "page": cur_page,
         "cid": currentCid,

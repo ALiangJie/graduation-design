@@ -9,8 +9,8 @@ function decodeQuery(){
 }
 
 $(function(){
-    // 页面加载完毕，获取新闻列表
-    getNewsList(1)
+    // 页面加载完毕，获取病毒数据列表
+    getVirusList(1)
 
     // TODO 关注当前作者
     $(".focus").click(function () {
@@ -85,7 +85,7 @@ $(function(){
     })
 })
 
-// TODO 获取新闻列表
+// TODO 获取病毒数据列表
 function getNewsList(page) {
     // 使用正则切割问号后面的参数,得到的是字典
     var query = decodeQuery()

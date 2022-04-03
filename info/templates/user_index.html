@@ -62,12 +62,16 @@
                         <a href="javascript:;">{{ data.user_info.nick_name }}</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-setting.html" data-title="基本资料"
-                                   data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
+                                <a href="javascript:;" layuimini-content-href="user_base_info" data-title="基本资料"
+                                   data-icon="fa fa-gears">基本资料</a>
                             </dd>
                             <dd>
-                                <a href="javascript:;" layuimini-content-href="page/user-password.html"
+                                <a href="javascript:;" layuimini-content-href="user_pass_info"
                                    data-title="修改密码" data-icon="fa fa-gears">修改密码</a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" layuimini-content-href="user_collection"
+                                   data-title="我的收藏" data-icon="fa fa-gears">我的收藏</a>
                             </dd>
                             <dd>
                                 <hr>
@@ -167,6 +171,7 @@
                 }
             })
         }
+
         function getCookie(name) {
             var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
             return r ? r[1] : undefined;

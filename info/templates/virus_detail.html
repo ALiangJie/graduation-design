@@ -6,8 +6,6 @@
     <link rel="stylesheet" type="text/css" href="../static/user_css/reset.css">
     <link rel="stylesheet" type="text/css" href="../static/user_css/main.css">
     <script type="text/javascript" src="../static/user_js/jquery-1.12.4.min.js"></script>
-    <script type="text/javascript" src="../static/user_js/detail.js"></script>
-    <script type="text/javascript" src="../static/user_js/main.js"></script>
 </head>
 <body>
 <div class="conter_con">
@@ -26,111 +24,378 @@
         {{ data.virus_info.content | safe }}
 
 
-        <a href="javascript:;" class="collection block-center" data-newid="">收藏</a>
-        <a href="javascript:;" class="collected block-center" data-newid="" style="display: none"><span
-                class="out">已收藏</span><span class="over">取消收藏</span></a>
+        <a href="javascript:;" class="collection block-center"
+           data-virusid="{{ data.virus_info.id }}"
+           style="display:
+                   {% if data.is_collected %}
+                       none
+                   {% else %}
+                       block
+                   {% endif %}">
+            收藏
+        </a>
+        <a href="javascript:;" class="collected block-center" data-virusid="{{ data.virus_info.id }}"
+           style="display:
+                   {% if data.is_collected %}
+                       block
+                   {% else %}
+                       none
+                   {% endif %}">
+            <span class="out">已收藏</span>
+            <span class="over">取消收藏</span>
+        </a>
 
 
-        <div class="comment_form_logout">
-            登录发表你的评论
-        </div>
-
-        <form action="" class="comment_form">
-            <div class="person_pic">
-                <img src="../static/images/cat.jpg" alt="用户图标">
+        {# 根据用户的登陆状态显示不同的输入框 #}
+        {% if data.user_info %}
+            <form action="" class="comment_form" data-virusid="{{ data.virus_info.id }}">
+                <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+                <input type="submit" name="" value="评 论" class="comment_sub">
+            </form>
+        {% else %}
+            <div class="comment_form_logout">
+                登录发表你的评论
             </div>
-            <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
-            <input type="submit" name="" value="评 论" class="comment_sub">
-        </form>
-
+        {% endif %}
 
         <div class="comment_count">
-            4条评论
+            {{ data.virus_info.comments_count }}条评论
         </div>
 
         <div class="comment_list_con">
-            <div class="comment_list">
-                <div class="person_pic fl">
-                    <img src="../static/images/worm.jpg" alt="用户图标">
-                </div>
-                <div class="user_name fl">用户张山</div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-                <div class="reply_text_con fl">
-                    <div class="user_name2">用户李思</div>
-                    <div class="reply_text">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
+            {# 遍历所有的评论 #}
+            {% for comment in data.comments %}
+                <div class="comment_list">
+                    <div class="user_name fl">{{ comment.user.nick_name }}</div>
+                    <div class="comment_text fl">
+                        {{ comment.content }}
                     </div>
-                </div>
-                <div class="comment_time fl">2017-01-01 00:00:00</div>
-                <a href="javascript:;" class="comment_up has_comment_up fr">1</a>
-                <a href="javascript:;" class="comment_reply fr">回复</a>
-                <from class="reply_form fl" data-newsid="" data-commentid="">
-                    <textarea class="reply_input"></textarea>
-                    <input type="submit" name="" value="回复" class="reply_sub fr">
-                    <input type="reset" name="" value="取消" class="reply_cancel fr">
-                </from>
-            </div>
 
-            <div class="comment_list">
-                <div class="person_pic fl">
-                    <img src="../static/images/worm.jpg" alt="用户图标">
-                </div>
-                <div class="user_name fl">用户张山</div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-                <div class="comment_time fl">2017-01-01 00:00:00</div>
-                <a href="javascript:;" class="comment_up fr">赞</a>
-                <a href="javascript:;" class="comment_reply fr">回复</a>
-                <from class="reply_form fl">
-                    <textarea class="reply_input"></textarea>
-                    <input type="submit" name="" value="回复" class="reply_sub fr">
-                    <input type="reset" name="" value="取消" class="reply_cancel fr">
-                </from>
-            </div>
+                    {# 判断是否有父评论 #}
+                    {% if comment.parent %}
+                        <div class="reply_text_con fl">
+                            <div class="user_name2">{{ comment.parent.user.nick_name }}</div>
+                            <div class="reply_text">
+                                {{ comment.parent.content }}
+                            </div>
+                        </div>
+                    {% endif %}
 
-            <div class="comment_list">
-                <div class="person_pic fl">
-                    <img src="../static/images/worm.jpg" alt="用户图标">
-                </div>
-                <div class="user_name fl">用户张山</div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-                <div class="comment_time fl">2017-01-01 00:00:00</div>
-                <a href="javascript:;" class="comment_up fr">赞</a>
-                <a href="javascript:;" class="comment_reply fr">回复</a>
-                <from class="reply_form fl">
-                    <textarea class="reply_input"></textarea>
-                    <input type="submit" name="" value="回复" class="reply_sub fr">
-                    <input type="reset" name="" value="取消" class="reply_cancel fr">
-                </from>
-            </div>
+                    <div class="comment_time fl">{{ comment.create_time }}</div>
+                    {# 处理点赞 #}
+                    <a href="javascript:;" class="comment_up {% if comment.is_like %} has_comment_up {% endif %} fr"
+                       data-commentid="{{ comment.id }}" data-likecount="{{ comment.like_count }}">
+                        {# 判断评论的数量 #}
+                        {% if comment.like_count > 0 %}
+                            {{ comment.like_count }}
+                        {% else %}
+                            赞
+                        {% endif %}
+                    </a>
 
-            <div class="comment_list">
-                <div class="person_pic fl">
-                    <img src="../static/images/worm.jpg" alt="用户图标">
+                    <a href="javascript:;" class="comment_reply fr">回复</a>
+                    {# 回复评论的表单 #}
+                    <from class="reply_form fl" data-virusid="{{ comment.virus_id }}" data-commentid="{{ comment.id }}">
+                        <textarea class="reply_input"></textarea>
+                        <input type="submit" name="" value="回复" class="reply_sub fr">
+                        <input type="reset" name="" value="取消" class="reply_cancel fr">
+                    </from>
                 </div>
-                <div class="user_name fl">用户张山</div>
-                <div class="comment_text fl">
-                    遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                </div>
-                <div class="comment_time fl">2017-01-01 00:00:00</div>
-                <a href="javascript:;" class="comment_up fr">赞</a>
-                <a href="javascript:;" class="comment_reply fr">回复</a>
-                <from class="reply_form fl">
-                    <textarea class="reply_input"></textarea>
-                    <input type="submit" name="" value="回复" class="reply_sub fr">
-                    <input type="reset" name="" value="取消" class="reply_cancel fr">
-                </from>
-            </div>
+            {% endfor %}
         </div>
-
-
     </div>
 </div>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
 
+
+    $(function () {
+
+        // 打开登录框
+        $('.comment_form_logout').click(function () {
+            alert("请先登录！");
+        })
+
+        // 收藏
+        $(".collection").click(function () {
+
+            //获取到病毒数据编号
+            var virus_id = $(".collection").attr('data-virusid');
+            var action = "collect"
+            var params = {
+                "virus_id": virus_id,
+                "action": action
+            }
+            $.ajax({
+                url: "/virus/virus_collect",
+                type: "post",
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": getCookie("csrf_token")
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno == "0") {
+                        // 收藏成功
+                        // 隐藏收藏按钮
+                        $(".collection").hide();
+                        // 显示取消收藏按钮
+                        $(".collected").show();
+                    } else if (resp.errno == "4101") {
+                        $('.login_form_con').show();
+                    } else {
+                        alert(resp.errmsg);
+                    }
+                }
+            })
+
+        })
+
+        // 取消收藏
+        $(".collected").click(function () {
+
+            var virus_id = $(".collected").attr('data-virusid');
+            var action = "cancel_collect"
+            var params = {
+                "virus_id": virus_id,
+                "action": action
+            }
+            $.ajax({
+                url: "/virus/virus_collect",
+                type: "post",
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": getCookie("csrf_token")
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno == "0") {
+                        // 收藏成功
+                        // 显示收藏按钮
+                        $(".collection").show();
+                        // 隐藏取消收藏按钮
+                        $(".collected").hide();
+                    } else if (resp.errno == "4101") {
+                        $('.login_form_con').show();
+                    } else {
+                        alert(resp.errmsg);
+                    }
+                }
+            })
+
+        })
+
+        // 评论提交
+        $(".comment_form").submit(function (e) {
+            e.preventDefault();
+            // 获取当前标签中的,病毒数据编号,评论内容
+            var virus_id = $(this).attr('data-virusid')
+            var virus_comment = $(".comment_input").val();
+
+            if (!virus_comment) {
+                alert('请输入评论内容');
+                return
+            }
+            var params = {
+                "virus_id": virus_id,
+                "comment": virus_comment
+            };
+            $.ajax({
+                url: "/virus/virus_comment",
+                type: "post",
+                contentType: "application/json",
+                headers: {
+                    "X-CSRFToken": getCookie("csrf_token")
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno == '0') {
+                        var comment = resp.data
+                        // 拼接内容
+                        var comment_html = ''
+                        comment_html += '<div class="comment_list">'
+                        comment_html += '<div class="person_pic fl">'
+                        comment_html += '<div class="user_name fl">' + comment.user.nick_name + '</div>'
+                        comment_html += '<div class="comment_text fl">'
+                        comment_html += comment.content
+                        comment_html += '</div>'
+                        comment_html += '<div class="comment_time fl">' + comment.create_time + '</div>'
+
+                        comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-virusid="' + comment.virus_id + '">赞</a>'
+                        comment_html += '<a href="javascript:;" class="comment_reply fr">回复</a>'
+                        comment_html += '<form class="reply_form fl" data-commentid="' + comment.id + '" data-virusid="' + virus_id + '">'
+                        comment_html += '<textarea class="reply_input"></textarea>'
+                        comment_html += '<input type="button" value="回复" class="reply_sub fr">'
+                        comment_html += '<input type="reset" name="" value="取消" class="reply_cancel fr">'
+                        comment_html += '</form>'
+                        comment_html += '</div>'
+                        // 拼接到内容的前面
+                        $(".comment_list_con").prepend(comment_html)
+                        // 让comment_sub 失去焦点
+                        $('.comment_sub').blur();
+                        // 清空输入框内容
+                        $(".comment_input").val("")
+                        //更新评论数量
+                        updateCommentCount();
+                    } else {
+                        alert(resp.errmsg)
+                    }
+                }
+            })
+
+        })
+
+        // 给a,input标签添加了代理事件
+        $('.comment_list_con').delegate('a,input', 'click', function () {
+
+            //获取到点击标签的class属性, reply_sub
+            var sHandler = $(this).prop('class');
+
+            if (sHandler.indexOf('comment_reply') >= 0) {
+                $(this).next().toggle();
+            }
+
+            if (sHandler.indexOf('reply_cancel') >= 0) {
+                $(this).parent().toggle();
+            }
+
+            // 点赞处理
+            if (sHandler.indexOf('comment_up') >= 0) {
+
+                var $this = $(this);
+                var action = "add"
+                if (sHandler.indexOf('has_comment_up') >= 0) {
+                    // 如果当前该评论已经是点赞状态，再次点击会进行到此代码块内，代表要取消点赞
+                    action = "remove"
+                }
+                //获取到当前点击的标签上面的, 评论编号, 病毒数据编号
+                var comment_id = $(this).attr("data-commentid")
+                var params = {
+                    "comment_id": comment_id,
+                    "action": action,
+                }
+                $.ajax({
+                    url: "/virus/comment_like",
+                    type: "post",
+                    contentType: "application/json",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrf_token")
+                    },
+                    data: JSON.stringify(params),
+                    success: function (resp) {
+                        if (resp.errno == "0") {
+                            //获取到当前标签中的点赞数量
+                            var like_count = $this.attr('data-likecount')
+
+                            //增加安全性校验,如果获取不到data-likecount的值,那么默认设置成0
+                            if (like_count == undefined) {
+                                like_count = 0;
+                            }
+
+                            // 更新点赞按钮图标,并加1, 减1操作
+                            if (action == "add") {
+                                like_count = parseInt(like_count) + 1
+                                // 代表是点赞
+                                $this.addClass('has_comment_up')
+                            } else {
+                                like_count = parseInt(like_count) - 1
+                                $this.removeClass('has_comment_up')
+                            }
+
+                            // 更新点赞数据,重新赋值回去
+                            $this.attr('data-likecount', like_count)
+                            if (like_count == 0) {
+                                $this.html("赞")
+                            } else {
+                                $this.html(like_count)
+                            }
+                        } else if (resp.errno == "4101") {
+                            $('.login_form_con').show();
+                        } else {
+                            alert(resp.errmsg)
+                        }
+                    }
+                })
+
+            }
+
+            // 评论回复
+            if (sHandler.indexOf('reply_sub') >= 0) {
+
+                var $this = $(this)
+                var virus_id = $this.parent().attr('data-virusid')
+                var parent_id = $this.parent().attr('data-commentid')
+                var comment = $this.prev().val()
+
+                if (!comment) {
+                    alert('请输入评论内容')
+                    return
+                }
+                var params = {
+                    "virus_id": virus_id,
+                    "comment": comment,
+                    "parent_id": parent_id
+                }
+                $.ajax({
+                    url: "/virus/virus_comment",
+                    type: "post",
+                    contentType: "application/json",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrf_token")
+                    },
+                    data: JSON.stringify(params),
+                    success: function (resp) {
+                        if (resp.errno == "0") {
+                            var comment = resp.data
+                            // 拼接内容
+                            var comment_html = ""
+                            comment_html += '<div class="comment_list">'
+                            comment_html += '<div class="user_name fl">' + comment.user.nick_name + '</div>'
+                            comment_html += '<div class="comment_text fl">'
+                            comment_html += comment.content
+                            comment_html += '</div>'
+                            comment_html += '<div class="reply_text_con fl">'
+                            comment_html += '<div class="user_name2">' + comment.parent.user.nick_name + '</div>'
+                            comment_html += '<div class="reply_text">'
+                            comment_html += comment.parent.content
+                            comment_html += '</div>'
+                            comment_html += '</div>'
+                            comment_html += '<div class="comment_time fl">' + comment.create_time + '</div>'
+                            comment_html += '<a href="javascript:;" class="comment_up fr" data-commentid="' + comment.id + '" data-virusid="' + comment.virus_id + '">赞</a>'
+                            comment_html += '<a href="javascript:;" class="comment_reply fr">回复</a>'
+                            comment_html += '<form class="reply_form fl" data-commentid="' + comment.id + '" data-virusid="' + virus_id + '">'
+                            comment_html += '<textarea class="reply_input"></textarea>'
+                            comment_html += '<input type="button" value="回复" class="reply_sub fr">'
+                            comment_html += '<input type="reset" name="" value="取消" class="reply_cancel fr">'
+                            comment_html += '</form>'
+                            comment_html += '</div>'
+                            $(".comment_list_con").prepend(comment_html)
+                            // 请空输入框
+                            $this.prev().val('')
+                            // 关闭
+                            $this.parent().hide()
+
+                            //更新评论数量
+                            updateCommentCount();
+                        } else {
+                            alert(resp.errmsg)
+                        }
+                    }
+                })
+
+            }
+        })
+    })
+
+    // 更新评论条数
+    function updateCommentCount() {
+        var length = $(".comment_list").length
+        $(".comment_count").html(length + "条评论")
+    }
+
+</script>
 </body>
 </html>

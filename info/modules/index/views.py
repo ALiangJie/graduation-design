@@ -1,6 +1,7 @@
+from info.commons import user_login_data
 from info.models import User, Virus
 from info.modules.index import index_blue
-from flask import render_template, current_app, session, request, jsonify
+from flask import render_template, current_app, session, request, jsonify, g
 
 
 # 病毒数据的显示
@@ -9,6 +10,7 @@ from flask import render_template, current_app, session, request, jsonify
 # 请求参数: cid,page,per_page,keywords
 # 返回值: data数据
 @index_blue.route('/virus_list')
+@user_login_data
 def virus_list():
     """
        1. 获取参数,p
@@ -61,22 +63,13 @@ def virus_list():
 
 # 主页的用户显示
 @index_blue.route('/user_index', methods=["POST", "GET"])
+@user_login_data
 def user_index_show():
-    # 1.获取用户的登录信息
-    user_id = session.get("user_id")
-
-    # 2.通过user_id取出用户对象
-    user = None
-    if user_id:
-        try:
-            user = User.query.get(user_id)
-        except Exception as e:
-            current_app.logger.error(e)
     # 3.拼接用户数据,渲染页面
 
     data = {
         # 如果user有值返回左边的内容，否则返回右边的值
-        "user_info": user.to_dict() if user else ""
+        "user_info": g.user.to_dict() if g.user else ""
     }
     return render_template("user_index.html", data=data)
 
@@ -97,6 +90,30 @@ def user_welcome_index_show():
 @index_blue.route('/welcome_index', methods=["GET"])
 def welcome_index_show():
     return render_template("welcome_index.html")
+
+
+# 显示系统设置界面
+@index_blue.route('/setting', methods=["GET"])
+def setting_show():
+    return render_template("setting.html")
+
+
+# 显示用户基本资料界面
+@index_blue.route('/user_base_info', methods=["GET"])
+def user_base_info_show():
+    return render_template("user_base_info.html")
+
+
+# 显示用户修改密码界面
+@index_blue.route('/user_pass_info', methods=["GET"])
+def user_pass_info_show():
+    return render_template("user_pass_info.html")
+
+
+# 显示用户收藏界面
+@index_blue.route('/user_collection', methods=["GET"])
+def user_collection_show():
+    return render_template("user_collection.html")
 
 
 # 处理网站favicon.ico
