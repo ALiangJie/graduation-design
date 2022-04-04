@@ -9,12 +9,12 @@
 </head>
 <body>
 <div class="header">
-    <a href="/" class="logout fr">退 出</a>
+    <a class="logout fr" onclick="adminlogout()">退 出</a>
 </div>
 
 <div class="side_bar">
     <div class="user_info">
-        <p>欢迎你 <em>{{ data.user_info.nick_name }}</em></p>
+        <p>欢迎您！管理员： <em>{{ data.user_info.nick_name }}</em></p>
     </div>
 
     <div class="menu_con">
@@ -25,7 +25,7 @@
         </ul>
         <div class="first_menu"><a href="#" class="icon02">病毒数据管理</a></div>
         <ul class="sub_menu">
-            <li><a href="/admin/news_edit" class="icon032" target="main_frame">病毒数据删改</a></li>
+            <li><a href="/admin/virus_edit" class="icon032" target="main_frame">病毒数据删改</a></li>
         </ul>
     </div>
 </div>
@@ -35,7 +35,7 @@
     <iframe src="/admin/user_count" frameborder="0" id="main_frame" name="main_frame" frameborder="0"
             scrolling="auto"></iframe>
 </div>
-
+<script src="../../static/lib/layui-v2.6.3/layui.js"></script>
 <script>
     $(function () {
         $('.first_menu').click(function () {
@@ -46,6 +46,24 @@
         var frame_h = $('#main_body').outerHeight();
         $('#main_frame').css({'width': frame_w, 'height': frame_h});
     })
+    //退出登录
+    window.adminlogout = function adminlogout() {
+        $.ajax({
+            url: '/admin/logout',
+            type: 'post',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (resp) {
+                layer.msg('退出登录成功!', function () {
+                    window.location = '/admin/login';
+                });
+            }
+        })
+    }
+
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
 </script>
 
 </body>

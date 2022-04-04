@@ -20,6 +20,8 @@
             <th>电话</th>
             <th>注册时间</th>
             <th>上次登录时间</th>
+            <th>修改信息</th>
+            <th>删除信息</th>
         </tr>
 
         {# 遍历用户数据 #}
@@ -29,6 +31,8 @@
                 <td>{{ user.mobile }}</td>
                 <td>{{ user.register }}</td>
                 <td>{{ user.last_login }}</td>
+                <td><a href="" class="edit">修改</a></td>
+                <td><a href="" class="edit">删除</a></td>
             </tr>
         {% endfor %}
     </table>

@@ -124,23 +124,6 @@ $(function(){
             "mobile":mobile,
             "password":password
         }
-
-        $.ajax({
-            url:'/passport/login',
-            type:'post',
-            data:JSON.stringify(params),
-            contentType:'application/json',
-            headers:{'X-CSRFToken':getCookie('csrf_token')},
-            success: function (resp) {
-                //判断是否登陆成功
-                if(resp.errno == '0'){
-                    window.location.reload()
-                }else{
-                    alert(resp.errmsg);
-                }
-
-            }
-        })
     })
 
 

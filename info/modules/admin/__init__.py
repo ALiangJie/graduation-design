@@ -27,4 +27,4 @@ def before_request():
     # 改装上面的代码
     if not request.url.endswith("/admin/login"):
         if not session.get("is_admin"):
-            return redirect("/")
+            return redirect("/admin/login")

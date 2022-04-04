@@ -22,21 +22,21 @@
 <div class="pannel">
     <table class="common_table">
         <tr>
-            <th width="5%">id</th>
-            <th width="70%">标题</th>
-            <th width="15%">发布时间</th>
-            <th width="10%">管理操作</th>
+            <th>id</th>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>编辑操作</th>
+            <th>删除操作</th>
         </tr>
 
         {# 遍历病毒数据 #}
-        {% for news in data.news_list %}
+        {% for virus in data.virus_list %}
             <tr>
-                <td>{{ news.id }}</td>
-                <td class="tleft">{{ news.title }}</td>
-                <td>{{ news.create_time }}</td>
-                <td>
-                    <a href="/admin/news_edit_detail?news_id={{ news.id }}" class="edit">编辑</a>
-                </td>
+                <td>{{ virus.id }}</td>
+                <td class="tleft">{{ virus.title }}</td>
+                <td>{{ virus.create_time }}</td>
+                <td><a href="/admin/virus_edit_detail?virus_id={{ virus.id }}" class="edit">编辑</a></td>
+                <td><a href="" class="edit">删除</a></td>
             </tr>
         {% endfor %}
     </table>
@@ -53,7 +53,7 @@
             totalPage: {{ data.totalPage }},
             callback: function (current) {
                 {#alert('ok!');#}
-                window.location.href = "/admin/news_edit?p=" + current;
+                window.location.href = "/admin/virus_edit?p=" + current;
             }
         });
     });
