@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/main.css">
+    <script type="text/javascript" src="../../static/admin_js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <a href="/" class="logout fr">退 出</a>
+</div>
+
+<div class="side_bar">
+    <div class="user_info">
+        <p>欢迎你 <em>{{ data.user_info.nick_name }}</em></p>
+    </div>
+
+    <div class="menu_con">
+        <div class="first_menu active"><a href="#" class="icon01">用户管理</a></div>
+        <ul class="sub_menu show">
+            <li><a class="icon022" href="/admin/user_count" target="main_frame">用户统计</a></li>
+            <li class="current"><a href="/admin/user_list" class="icon021" target="main_frame">用户列表</a></li>
+        </ul>
+        <div class="first_menu"><a href="#" class="icon02">病毒数据管理</a></div>
+        <ul class="sub_menu">
+            <li><a href="/admin/news_edit" class="icon032" target="main_frame">病毒数据删改</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="main_body" id="main_body">
+    {# 默认展示的用户图表页面 #}
+    <iframe src="/admin/user_count" frameborder="0" id="main_frame" name="main_frame" frameborder="0"
+            scrolling="auto"></iframe>
+</div>
+
+<script>
+    $(function () {
+        $('.first_menu').click(function () {
+            $(this).addClass('active').siblings('.first_menu').removeClass('active');
+            $(this).next().slideDown().siblings('.sub_menu').slideUp();
+        })
+        var frame_w = $('#main_body').outerWidth();
+        var frame_h = $('#main_body').outerHeight();
+        $('#main_frame').css({'width': frame_w, 'height': frame_h});
+    })
+</script>
+
+</body>
+</html>

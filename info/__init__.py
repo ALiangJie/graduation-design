@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask
+from flask import Flask, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_session import Session
@@ -38,7 +38,7 @@ def create_app(config_name):
     Session(app)
 
     # 使用CSRFProtect保护app，验证机制，防止CSRF攻击，['POST', 'PUT', 'PATCH', 'DELETE']
-    # CSRFProtect(app)
+    CSRFProtect(app)
 
     # 将首页蓝图index_blue,注册到app中
     from info.modules.index import index_blue
@@ -52,15 +52,25 @@ def create_app(config_name):
     from info.modules.virus import virus_blue
     app.register_blueprint(virus_blue)
 
+    # 将管理员蓝图admin_blue,注册到app中
+    from info.modules.admin import admin_blue
+    app.register_blueprint(admin_blue)
+
     # 使用请求钩子拦截所有的请求,统一的在cookie中设置csrf_token
-    # @app.after_request
-    # def after_request(resp):
-    #     # 调用系统方法,获取csrf_token
-    #     csrf_token = generate_csrf()
-    #     # 将csrf_token设置到cookie中
-    #     resp.set_cookie("csrf_token", csrf_token)
-    #     # 返回响应
-    #     return resp
+    @app.after_request
+    def after_request(resp):
+        # 调用系统方法,获取csrf_token
+        csrf_token = generate_csrf()
+        # 将csrf_token设置到cookie中
+        resp.set_cookie("csrf_token", csrf_token)
+        # 返回响应
+        return resp
+
+    # 使用errorhandler统一处理404异常信息
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("404.html")
+        # return redirect("/404")
 
     # 打印路径进行测试
     print(app.url_map)

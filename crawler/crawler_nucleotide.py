@@ -65,8 +65,8 @@ if __name__ == '__main__':
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     }
 
-    start_page = 1
-    for page_num in range(start_page, 3):
+    start_page = 5
+    for page_num in range(start_page, 8):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno').click()
         bro.find_element_by_id('pageno').clear()

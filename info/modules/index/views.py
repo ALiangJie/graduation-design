@@ -1,7 +1,10 @@
+import time
+from datetime import datetime, timedelta
+
 from info.commons import user_login_data
 from info.models import User, Virus
 from info.modules.index import index_blue
-from flask import render_template, current_app, session, request, jsonify, g
+from flask import render_template, current_app, session, request, jsonify, g, abort
 from info.response_code import RET
 
 
@@ -221,10 +224,116 @@ def user_login_show():
     return render_template("user_login.html")
 
 
-# 欢迎页面显示
+# 数据可视化显示
 @index_blue.route('/user_welcome', methods=["GET"])
 def user_welcome_index_show():
-    return render_template("user_welcome.html")
+    # 1.获取病毒数据总数
+    try:
+        virus_total = Virus.query.count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="获取数据失败")
+    # 2.获取病毒数据基因数据总数
+    try:
+        virus_gene_total = Virus.query.filter(Virus.category_id == 1).count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="获取数据失败")
+    # 3.获取病毒数据核苷酸数据总数
+    try:
+        virus_nucleotide_total = Virus.query.filter(Virus.category_id == 2).count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="获取数据失败")
+    # 4.获取病毒数据蛋白质数据总数
+    try:
+        virus_protein_total = Virus.query.filter(Virus.category_id == 3).count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="获取数据失败")
+
+    # 2.获取月增加量
+    localtime = time.localtime()
+    try:
+        # 2.1先获取本月的1号的0点的, 字符串数据
+        month_start_time_str = "%s-%s-01" % (localtime.tm_year, localtime.tm_mon)
+
+        # 2.2根据字符串,格式化日期对象
+        month_start_time_date = datetime.strptime(month_start_time_str, "%Y-%m-%d")
+
+        # 2.3最后一次登陆的时间大于,本月的1号的0点钟的数据
+        month_count = Virus.query.filter(Virus.create_time >= month_start_time_date).count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return render_template("user_welcome.html", errmsg="获取月增加量失败")
+
+    # 3.获取日增加量
+    try:
+        # 2.1先获取本日的0点, 字符串数据
+        day_start_time_str = "%s-%s-%s" % (localtime.tm_year, localtime.tm_mon, localtime.tm_mday)
+
+        # 2.2根据字符串,格式化日期对象
+        day_start_time_date = datetime.strptime(day_start_time_str, "%Y-%m-%d")
+
+        # 2.3最后一次登陆的时间大于,本日0点钟的人数
+        day_count = Virus.query.filter(Virus.create_time >= day_start_time_date).count()
+    except Exception as e:
+        current_app.logger.error(e)
+        return render_template("user_welcome.html", errmsg="获取日增加量失败")
+
+    # 4.获取活跃时间段内,对应的增加量
+    active_date = []  # 获取增加的日期
+    active_count = []  # 获取总增加的数量
+    active_count1 = []  # 获取基因增加的数量
+    active_count2 = []  # 获取核苷酸增加的数量
+    active_count3 = []  # 获取蛋白质增加的数量
+    for i in range(0, 31):
+        # 当天开始时间A
+        begin_date = day_start_time_date - timedelta(days=i)
+        # 当天开始时间的后一天B
+        end_date = day_start_time_date - timedelta(days=i - 1)
+        # 添加当天开始时间字符串到, 增加日期中
+        active_date.append(begin_date.strftime("%Y-%m-%d"))
+        # 查询时间A到B这一天的增加数量
+        everyday_active_count = Virus.query.filter(Virus.create_time >= begin_date,
+                                                   Virus.create_time <= end_date).count()
+        # 基因
+        everyday_active_count1 = Virus.query.filter(Virus.create_time >= begin_date,
+                                                    Virus.create_time <= end_date, Virus.category_id == 1).count()
+        # 核苷酸
+        everyday_active_count2 = Virus.query.filter(Virus.create_time >= begin_date,
+                                                    Virus.create_time <= end_date, Virus.category_id == 2).count()
+        # 蛋白质
+        everyday_active_count3 = Virus.query.filter(Virus.create_time >= begin_date,
+                                                    Virus.create_time <= end_date, Virus.category_id == 3).count()
+        # 添加当天增加数量,获取数量
+        active_count.append(everyday_active_count)
+        active_count1.append(everyday_active_count1)
+        active_count2.append(everyday_active_count2)
+        active_count3.append(everyday_active_count3)
+
+    # 为了图表显示方便,将容器反转
+    active_count.reverse()
+    active_count1.reverse()
+    active_count2.reverse()
+    active_count3.reverse()
+    active_date.reverse()
+
+    # 3.携带数据,渲染页面
+    data = {
+        "virus_total": virus_total,
+        "virus_gene_total": virus_gene_total,
+        "virus_nucleotide_total": virus_nucleotide_total,
+        "virus_protein_total": virus_protein_total,
+        "month_count": month_count,
+        "day_count": day_count,
+        "active_date": active_date,
+        "active_count": active_count,
+        "active_count1": active_count1,
+        "active_count2": active_count2,
+        "active_count3": active_count3,
+    }
+    return render_template("user_welcome.html", data=data)
 
 
 # 显示首页欢迎界面

@@ -31,7 +31,7 @@ body {
 .header .logout {
     width: 90px;
     height: 30px;
-    background: url(../images/icons.png) 10px -344px no-repeat #1ab394;
+    background: url(../../static/images/icons.png) 10px -344px no-repeat #1ab394;
     margin: 15px 20px 0 0;
     border-radius: 4px;
     text-indent: 40px;
@@ -44,7 +44,7 @@ body {
     width: 88px;
     height: 28px;
     border: 1px solid #1ab394;
-    background: url(../images/icons.png) 10px -344px no-repeat #2f4050;
+    background: url(../../static/images/icons.png) 10px -344px no-repeat #2f4050;
     opacity: 0.5;
 }
 
@@ -91,11 +91,11 @@ body {
 .first_menu {
     height: 44px;
     border-bottom: 1px solid #597b9b;
-    background: url(../images/icons.png) 190px -283px no-repeat;
+    background: url(../../static/images/icons.png) 190px -283px no-repeat;
 }
 
 .menu_con .active {
-    background: url(../images/icons.png) 190px -283px no-repeat #2f4050;
+    background: url(../../static/images/icons.png) 190px -283px no-repeat #2f4050;
     border-bottom: 0px;
 }
 
@@ -109,40 +109,40 @@ body {
 }
 
 .icon01 {
-    background: url(../images/icons.png) 20px 12px no-repeat;
+    background: url(../../static/images/icons.png) 20px 12px no-repeat;
 }
 
 .icon02 {
-    background: url(../images/icons.png) 20px -38px no-repeat;
+    background: url(../../static/images/icons.png) 20px -38px no-repeat;
 }
 
 .icon021 {
-    background: url(../images/icons.png) 50px -87px no-repeat;
+    background: url(../../static/images/icons.png) 50px -87px no-repeat;
 }
 
 .icon022 {
-    background: url(../images/icons.png) 50px -139px no-repeat;
+    background: url(../../static/images/icons.png) 50px -139px no-repeat;
 }
 
 
 .icon03 {
-    background: url(../images/icons.png) 20px -89px no-repeat;
+    background: url(../../static/images/icons.png) 20px -89px no-repeat;
 }
 
 .icon031 {
-    background: url(../images/icons.png) 50px -185px no-repeat;
+    background: url(../../static/images/icons.png) 50px -185px no-repeat;
 }
 
 .icon032 {
-    background: url(../images/icons.png) 50px -235px no-repeat;
+    background: url(../../static/images/icons.png) 50px -235px no-repeat;
 }
 
 .icon033 {
-    background: url(../images/icons.png) 50px -336px no-repeat;
+    background: url(../../static/images/icons.png) 50px -336px no-repeat;
 }
 
 .icon034 {
-    background: url(../images/icons.png) 50px -390px no-repeat;
+    background: url(../../static/images/icons.png) 50px -390px no-repeat;
 }
 
 .sub_menu {
@@ -151,7 +151,7 @@ body {
 }
 
 .sub_menu li {
-    background: url(../images/icons.png) 190px -283px no-repeat #2f4050;
+    background: url(../../static/images/icons.png) 190px -283px no-repeat #2f4050;
 }
 
 .sub_menu a {
@@ -274,7 +274,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -9999;
-    background: url(../images/login-bg.jpg) no-repeat;
+    background: url(../../static/images/loginbg.png) no-repeat;
 }
 
 .login_form {

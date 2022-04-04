@@ -15,16 +15,19 @@
             border-radius: 5px;
             text-align: center;
         }
-        .top-panel > .layui-card-body{
+
+        .top-panel > .layui-card-body {
             height: 60px;
         }
-        .top-panel-number{
-            line-height:60px;
+
+        .top-panel-number {
+            line-height: 60px;
             font-size: 30px;
-            border-right:1px solid #eceff9;
+            border-right: 1px solid #eceff9;
         }
-        .top-panel-tips{
-            line-height:30px;
+
+        .top-panel-tips {
+            line-height: 30px;
             font-size: 12px
         }
     </style>
@@ -37,15 +40,11 @@
         <div class="layui-col-xs12 layui-col-md3">
 
             <div class="layui-card top-panel">
-                <div class="layui-card-header">要展示的指标名称</div>
+                <div class="layui-card-header">总数据量</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
                         <div class="layui-col-xs9 layui-col-md9 top-panel-number">
-                            9,054,056
-                        </div>
-                        <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                            比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                            比七日 <a style="color: #bd3004">▼0.06</a>
+                            {{ data.virus_total }}
                         </div>
                     </div>
                 </div>
@@ -55,15 +54,11 @@
         <div class="layui-col-xs12 layui-col-md3">
 
             <div class="layui-card top-panel">
-                <div class="layui-card-header">要展示的指标名称</div>
+                <div class="layui-card-header">基因数据量</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
                         <div class="layui-col-xs9 layui-col-md9 top-panel-number">
-                            9,054,056
-                        </div>
-                        <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                            比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                            比七日 <a style="color: #bd3004">▼0.06</a>
+                            {{ data.virus_gene_total }}
                         </div>
                     </div>
                 </div>
@@ -73,15 +68,11 @@
         <div class="layui-col-xs12 layui-col-md3">
 
             <div class="layui-card top-panel">
-                <div class="layui-card-header">要展示的指标名称</div>
+                <div class="layui-card-header">核苷酸数据量</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
                         <div class="layui-col-xs9 layui-col-md9 top-panel-number">
-                            9,054,056
-                        </div>
-                        <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                            比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                            比七日 <a style="color: #bd3004">▼0.06</a>
+                            {{ data.virus_nucleotide_total }}
                         </div>
                     </div>
                 </div>
@@ -91,15 +82,11 @@
         <div class="layui-col-xs12 layui-col-md3">
 
             <div class="layui-card top-panel">
-                <div class="layui-card-header">要展示的指标名称</div>
+                <div class="layui-card-header">蛋白质数据量</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
                         <div class="layui-col-xs9 layui-col-md9 top-panel-number">
-                            9,054,056
-                        </div>
-                        <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                            比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                            比七日 <a style="color: #bd3004">▼0.06</a>
+                            {{ data.virus_protein_total }}
                         </div>
                     </div>
                 </div>
@@ -145,7 +132,7 @@
 
         var optionRecords = {
             title: {
-                text: '指标名称-报表图'
+                text: '数据增加图'
             },
             tooltip: {
                 trigger: 'axis',
@@ -157,7 +144,7 @@
                 }
             },
             legend: {
-                data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                data: ['总数量', '基因', '核苷酸', '蛋白质']
             },
             toolbox: {
                 feature: {
@@ -172,57 +159,43 @@
             },
             xAxis: [
                 {
+                    name: '今天',
                     type: 'category',
                     boundaryGap: false,
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    data: {{ data.active_date | safe}}
                 }
             ],
             yAxis: [
                 {
+                    name: '增加数量',
                     type: 'value'
                 }
             ],
             series: [
                 {
-                    name: '邮件营销',
+                    name: '基因',
                     type: 'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data: [120, 132, 101, 134, 90, 230, 210]
+                    smooth: true,
+                    data: {{ data.active_count1 }}
                 },
                 {
-                    name: '联盟广告',
+                    name: '核苷酸',
                     type: 'line',
-                    areaStyle: {},
-                    data: [220, 182, 191, 234, 290, 330, 310]
+                    smooth: true,
+                    data: {{ data.active_count2 }}
                 },
                 {
-                    name: '视频广告',
+                    name: '蛋白质',
                     type: 'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data: [150, 232, 201, 154, 190, 330, 410]
+                    smooth: true,
+                    data: {{ data.active_count3 }}
                 },
                 {
-                    name: '直接访问',
+                    name: '总数量',
                     type: 'line',
-                    stack: '总量',
-                    areaStyle: {},
-                    data: [320, 332, 301, 334, 390, 330, 320]
+                    smooth: true,
+                    data: {{ data.active_count }}
                 },
-                {
-                    name: '搜索引擎',
-                    type: 'line',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'top'
-                        }
-                    },
-                    areaStyle: {},
-                    data: [820, 932, 901, 934, 1290, 1330, 1320]
-                }
             ]
         };
         echartsRecords.setOption(optionRecords);
@@ -234,7 +207,8 @@
         var echartsPies = echarts.init(document.getElementById('echarts-pies'), 'walden');
         var optionPies = {
             title: {
-                text: '指标名称-玫瑰图',
+                {#玫瑰图#}
+                text: '数据占比图',
                 left: 'center'
             },
             tooltip: {
@@ -244,21 +218,19 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                data: ['基因', '核苷酸', '蛋白质']
             },
             series: [
                 {
-                    name: '访问来源',
+                    name: '数据类型',
                     type: 'pie',
                     radius: '55%',
                     center: ['50%', '60%'],
                     roseType: 'radius',
                     data: [
-                        {value: 335, name: '直接访问'},
-                        {value: 310, name: '邮件营销'},
-                        {value: 234, name: '联盟广告'},
-                        {value: 135, name: '视频广告'},
-                        {value: 368, name: '搜索引擎'}
+                        {value: {{ data.virus_gene_total }}, name: '基因'},
+                        {value: {{ data.virus_nucleotide_total }}, name: '核苷酸'},
+                        {value: {{ data.virus_protein_total }}, name: '蛋白质'},
                     ],
                     emphasis: {
                         itemStyle: {
@@ -282,19 +254,24 @@
             legend: {},
             tooltip: {},
             dataset: {
-                dimensions: ['product', '2015', '2016', '2017'],
+                dimensions: ['product', '总数', '基因', '核苷酸', '蛋白质'],
                 source: [
-                    {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
-                    {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
-                    {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
-                    {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1}
+                    {
+                        product: '当前',
+                        '总数': {{ data.virus_total }},
+                        '基因': {{ data.virus_gene_total }},
+                        '核苷酸': {{ data.virus_nucleotide_total}},
+                        '蛋白质': {{ data.virus_protein_total }}
+                    },
                 ]
             },
             xAxis: {type: 'category'},
             yAxis: {},
+
             // Declare several bar series, each will be mapped
             // to a column of dataset.source by default.
             series: [
+                {type: 'bar'},
                 {type: 'bar'},
                 {type: 'bar'},
                 {type: 'bar'}
@@ -319,17 +296,15 @@
             dataset: {
                 source: [
                     ['product', '2012', '2013', '2014', '2015', '2016', '2017'],
-                    ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
-                    ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
-                    ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
-                    ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1]
+                    ['基因', {{ data.virus_gene_total }}],
+                    ['核苷酸', {{ data.virus_nucleotide_total }}],
+                    ['蛋白质', {{ data.virus_protein_total }}],
                 ]
             },
             xAxis: {type: 'category'},
             yAxis: {gridIndex: 0},
             grid: {top: '55%'},
             series: [
-                {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
