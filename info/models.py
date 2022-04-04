@@ -72,8 +72,8 @@ class User(BaseModel, db.Model):
             "nick_name": self.nick_name,
             "mobile": self.mobile,
             "gender": self.gender if self.gender else "MAN",
-            "signature": self.signature if self.signature else "",
-            "followers_count": self.followers.count,
+            "signature": self.signature if self.signature else ""
+            # "followers_count": self.followers.count,
         }
         return resp_dict
 
