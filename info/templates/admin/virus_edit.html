@@ -36,7 +36,7 @@
                 <td class="tleft">{{ virus.title }}</td>
                 <td>{{ virus.create_time }}</td>
                 <td><a href="/admin/virus_edit_detail?virus_id={{ virus.id }}" class="edit">编辑</a></td>
-                <td><a href="" class="edit">删除</a></td>
+                <td><a href="/admin/virus_edit_delete?virus_id={{ virus.id }}" class="edit">删除</a></td>
             </tr>
         {% endfor %}
     </table>

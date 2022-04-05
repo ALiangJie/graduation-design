@@ -3,22 +3,22 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
-$(function(){
+$(function () {
     $(".news_edit").submit(function (e) {
         e.preventDefault()
         // 如果是ajaxsubmit是表单提交
-        /*
+
         $(this).ajaxSubmit({
             beforeSubmit: function (request) {
                 // 在提交之前，对参数进行处理
-                for(var i=0; i<request.length; i++) {
+                for (var i = 0; i < request.length; i++) {
                     var item = request[i]
                     if (item["name"] == "content") {
                         item["value"] = tinyMCE.activeEditor.getContent()
                     }
                 }
             },
-            url: "/admin/news_edit_detail",
+            url: "/admin/virus_edit_detail",
             type: "POST",
             headers: {
                 "X-CSRFToken": getCookie('csrf_token')
@@ -32,7 +32,6 @@ $(function(){
                 }
             }
         })
-        */
     })
 })
 

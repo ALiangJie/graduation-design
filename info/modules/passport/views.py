@@ -75,6 +75,7 @@ def login():
 
     # 6. 将用户的登陆信息保存在session中
     session["user_id"] = user.id
+    session["is_admin"] = user.is_admin
 
     # 6.1 记录用户最后一次的登陆时间
     user.last_login = datetime.now()

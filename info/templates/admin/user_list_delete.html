@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>删除用户数据</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/main.css">
+    <script type="text/javascript" src="../../static/admin_js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../../static/admin_js/jquery.form.min.js"></script>
+
+</head>
+<body>
+<div class="breadcrub">
+    当前位置：用户管理>用户数据删除
+</div>
+<div class="form_group">
+    <label>当前删除用户数据id：{{ user.id }}</label>
+    <label>名称：{{ user.nick_name }}</label>
+    <label>手机号：{{ user.mobile }}</label>
+    <label>性别：{{ user.gender }}</label>
+    <label>个性签名：{{ user.signature }}</label>
+</div>
+
+
+<input type="hidden" name="user_mobile" id="user_mobile" value="{{ user.mobile }}">
+<div class="form_group indent_group line_top">
+    <input type="submit" value="确定删除" class="confirm" onclick="confirm()">
+    <input type="button" value="取消删除" class="cancel" onclick="cancel()">
+</div>
+
+
+</body>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    function confirm() {
+        var user_mobile = $('#user_mobile').val()
+        // 发起请求
+        // 拼接参数
+        var params = {
+            "user_mobile": user_mobile,
+        }
+
+        $.ajax({
+            url: '/admin/user_edit_delete',
+            type: 'POST',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (resp) {
+                if (resp.errno == '0') {
+                    window.alert("数据删除成功!");
+                    // 返回上一页，刷新数据
+                    location.href = document.referrer;
+                } else {
+                    window.alert(resp.errmsg);
+                }
+            }
+        })
+    }
+
+    // 点击取消，返回上一页
+    function cancel() {
+        history.go(-1)
+    }
+</script>
+</html>

@@ -1,62 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>后台管理</title>
-	<link rel="stylesheet" type="text/css" href="../../static/admin_css/reset.css">
-	<link rel="stylesheet" type="text/css" href="../../static/admin_css/main.css">
-	<script type="text/javascript" src="../../static/admin_js/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript" src="../../static/admin_js/jquery.form.min.js"></script>
-	<script src="../../static/admin_js/tinymce/js/tinymce/tinymce.min.js"></script>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/main.css">
+    <script type="text/javascript" src="../../static/admin_js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../../static/admin_js/jquery.form.min.js"></script>
+    <script src="../../static/admin_js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="../../static/admin_js/tinymce_setup.js"></script>
-	<script src="../../static/admin_js/news_edit_detail.js"></script>
 </head>
 <body>
-	<div class="breadcrub">
-			当前位置：病毒数据管理>病毒数据版本编辑
-		</div>
-		<div class="pannel">
-			<form class="news_edit">
-			<h3 class="review_title">病毒数据版式编辑</h3>
-	    	<div class="form_group">
-	    		<label>病毒数据标题：</label>
-	    		<input type="text" class="input_txt2" name="title" value="{{ news.title }}">
-	    	</div>
-	    	<div class="form_group">
-				<label>病毒数据分类：</label>
-				<select class="sel_opt" name="category_id">
+<div class="breadcrub">
+    当前位置：病毒数据管理>病毒数据编辑
+</div>
+<div class="pannel">
+    <form class="virus_edit">
+        <h3 class="review_title">病毒数据编辑</h3>
+        <div class="form_group">
+            <label>病毒数据标题：</label>
+            <input type="text" class="input_txt2" name="title" value="{{ virus.title }}">
+        </div>
+        <div class="form_group">
+            <label>病毒数据分类：</label>
+            <select class="sel_opt" name="category_id">
 
-                    {% for category in category_list if category.name != "最新" %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-				</select>
-			</div>
-			<div class="form_group">
-				<label>病毒数据摘要：</label>
-				<textarea class="input_multxt" name="digest">{{ news.digest }}</textarea>
-			</div>
-			<div class="form_group">
-				<label>索引图片：</label>
-                <img src="{{ news.index_image_url }}" alt="索引图片" class="index_pic">
-			</div>
-			<div class="form_group">
-				<label>上传图片：</label>
-				<input type="file" class="input_file" name="index_image">
-			</div>
-			<div class="form_group">
-				<label>病毒数据内容：</label>
-				<div class="rich_wrap fl">
-					<input class="input_area" id="rich_content" name="content" value="{{ news.content }}"></input>
-				</div>
-			</div>
-            {# 设置病毒数据的编号 #}
-                <input type="hidden" name="news_id" value="{{ news.id }}">
-			<div class="form_group indent_group line_top">
-				<input type="submit" value="确定" class="confirm">
-				<input type="button" value="取消" class="cancel" onclick="cancel()">
-			</div>
-			</form>	
-		</div>
+                {% for category in category_list if category.name != "最新" %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form_group">
+            <label>病毒数据来源：</label>
+            <textarea class="input_multxt" name="source">{{ virus.source }}</textarea>
+        </div>
+        <div class="form_group">
+            <label>病毒数据内容：</label>
+            <div class="rich_wrap fl">
+                <input class="input_area" id="rich_content" name="content" value="{{ virus.content }}"></input>
+            </div>
+        </div>
+        {# 设置病毒数据的编号 #}
+        <input type="hidden" name="virus_id" value="{{ virus.id }}">
+        <div class="form_group indent_group line_top">
+            <input type="submit" value="确定" class="confirm">
+            <input type="button" value="取消" class="cancel" onclick="cancel()">
+        </div>
+    </form>
+</div>
 
 </body>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    $(function () {
+        $(".virus_edit").submit(function (e) {
+            e.preventDefault()
+            // 如果是ajaxsubmit是表单提交
+            
+            $(this).ajaxSubmit({
+                beforeSubmit: function (request) {
+                    // 在提交之前，对参数进行处理
+                    for (var i = 0; i < request.length; i++) {
+                        var item = request[i]
+                        if (item["name"] == "content") {
+                            item["value"] = tinyMCE.activeEditor.getContent()
+                        }
+                    }
+                },
+                url: "/admin/virus_edit_detail",
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie('csrf_token')
+                },
+                success: function (resp) {
+                    if (resp.errno == "0") {
+                        // 返回上一页，刷新数据
+                        location.href = document.referrer;
+                    } else {
+                        alert(resp.errmsg);
+                    }
+                }
+            })
+        })
+    })
+
+    // 点击取消，返回上一页
+    function cancel() {
+        history.go(-1)
+    }
+</script>
 </html>

@@ -8,6 +8,56 @@ from info.models import User, Virus, Category
 from info.modules.admin import admin_blue
 
 
+@admin_blue.route('/virus_edit_delete', methods=['GET', 'POST'])
+def virus_edit_delete():
+    """
+      1.判断请求方式,如果是GET
+      2.获取病毒数据编号
+      3.通过病毒数据编号查询病毒数据对象,并判断病毒数据对象是否存在
+      4.携带病毒数据数据和分类数据,渲染页面
+      5.如果是POST请求,获取参数
+      6.参数校验,为空校验
+      7.根据病毒数据的编号取出病毒数据对象
+      8.上传病毒数据图片
+      9.设置病毒数据对象的属性
+      10.返回响应
+      :return:
+      """
+    # 1.判断请求方式,如果是GET
+    if request.method == "GET":
+        # 2.获取病毒数据编号
+        virus_id = request.args.get("virus_id")
+
+        # 3.通过病毒数据编号查询病毒数据对象,并判断病毒数据对象是否存在
+        try:
+            virus = Virus.query.get(virus_id)
+        except Exception as e:
+            current_app.logger.error(e)
+            return render_template("admin/virus_edit_delete.html", errmsg="病毒数据获取失败")
+
+        if not virus:
+            return render_template("admin/virus_edit_delete.html", errmsg="该病毒数据不存在")
+
+        # 4.携带病毒数据数据, 渲染页面
+        return render_template("admin/virus_edit_delete.html", virus=virus.to_dict())
+
+    # 5.如果是delete请求,获取参数virus_id
+    dict_data = request.json
+    virus_id = dict_data.get("virus_id")
+    # 7.根据病毒数据的编号取出病毒数据对象
+    # 先查询，后删除
+    try:
+        virus = Virus.query.get(virus_id)
+        db.session.delete(virus)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="该数据存在收藏和评论，删除失败!")
+
+    # 10.返回响应
+    return jsonify(errno=RET.OK, errmsg="删除成功！")
+
+
 # 获取/设置病毒数据编辑详情
 # 请求路径: /admin/virus_edit_detail
 # 请求方式: GET, POST
@@ -61,13 +111,12 @@ def virus_edit_detail():
     # 5.如果是POST请求,获取参数(virus_id,title,digest,content,index_image,category_id)
     virus_id = request.form.get("virus_id")
     title = request.form.get("title")
-    digest = request.form.get("digest")
+    source = request.form.get("source")
     content = request.form.get("content")
-    index_image = request.files.get("index_image")
     category_id = request.form.get("category_id")
 
     # 6.参数校验,为空校验
-    if not all([virus_id, title, digest, content, index_image, category_id]):
+    if not all([virus_id, title, source, content, category_id]):
         return jsonify(errno=RET.PARAMERR, errmsg="参数不全")
 
     # 7.根据病毒数据的编号取出病毒数据对象
@@ -82,7 +131,7 @@ def virus_edit_detail():
 
     # 9.设置病毒数据对象的属性
     virus.title = title
-    virus.digest = digest
+    virus.source = source
     virus.content = content
     virus.category_id = category_id
 
@@ -118,7 +167,6 @@ def virus_edit():
 
     # 3. 分页查询待审核,未通过的病毒数据数据
     try:
-
         # 3.1判断是否有填写搜索关键
         filters = []
         if keywords:
@@ -148,6 +196,61 @@ def virus_edit():
     return render_template("admin/virus_edit.html", data=data)
 
 
+# 删除用户
+# 请求路径: /admin/user_edit_delete
+# 请求方式:POST
+# 请求参数:POST有参数,mobile
+# 返回值:data字典数据, POST请求: errno, errmsg
+@admin_blue.route('/user_edit_delete', methods=['GET', 'POST'])
+def user_edit_delete():
+    """
+      1.判断请求方式,如果是GET
+      2.获取病毒数据编号
+      3.通过病毒数据编号查询病毒数据对象,并判断病毒数据对象是否存在
+      4.携带病毒数据数据和分类数据,渲染页面
+      5.如果是POST请求,获取参数
+      6.参数校验,为空校验
+      7.根据病毒数据的编号取出病毒数据对象
+      8.上传病毒数据图片
+      9.设置病毒数据对象的属性
+      10.返回响应
+      :return:
+      """
+    # 1.判断请求方式,如果是GET
+    if request.method == "GET":
+        # 2.获取用户手机号
+        user_mobile = request.args.get("user_mobile")
+
+        # 3.通过用户手机号查询用户对象,并判断用户对象是否存在
+        try:
+            user = User.query.filter(User.mobile == user_mobile).first()
+        except Exception as e:
+            current_app.logger.error(e)
+            return render_template("admin/user_list_delete.html", errmsg="用户获取失败")
+
+        if not user:
+            return render_template("admin/user_list_delete.html", errmsg="该用户不存在")
+
+        # 4.携带病毒数据数据, 渲染页面
+        return render_template("admin/user_list_delete.html", user=user.to_dict())
+
+    # 5.如果是delete请求,获取参数user_mobile
+    dict_data = request.json
+    user_mobile = dict_data.get("user_mobile")
+    # 7.根据用户手机号取出用户数据对象
+    # 先查询，后删除
+    try:
+        user = User.query.filter(User.mobile == user_mobile).first()
+        db.session.delete(user)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="该用户存在使用，删除失败!")
+
+    # 10.返回响应
+    return jsonify(errno=RET.OK, errmsg="删除成功！")
+
+
 # 用户列表
 # 请求路径: /admin/user_list
 # 请求方式: GET
@@ -156,7 +259,7 @@ def virus_edit():
 @admin_blue.route('/user_list')
 def user_list():
     """
-    1. 获取参数,p
+    1. 获取参数,p,keywords
     2. 参数类型转换
     3. 分页查询用户数据
     4. 获取分页对象属性,总页数,当前页,当前页对象列表
@@ -166,6 +269,7 @@ def user_list():
     """
     # 1. 获取参数,p
     page = request.args.get("p", "1")
+    keywords = request.args.get("keywords", "")
 
     # 2. 参数类型转换
     try:
@@ -175,7 +279,13 @@ def user_list():
 
     # 3. 分页查询用户数据
     try:
-        paginate = User.query.filter(User.is_admin == False).order_by(User.create_time.desc()).paginate(page, 10, False)
+        # 3.1判断是否有填写搜索关键
+        filters = []
+        if keywords:
+            filters.append(User.mobile.contains(keywords))
+        paginate = User.query.filter(*filters, User.is_admin == False).order_by(User.create_time.desc()).paginate(page,
+                                                                                                                  10,
+                                                                                                                  False)
     except Exception as e:
         current_app.logger.error(e)
         return render_template("admin/user_list.html", errmsg="获取用户失败")

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>删除病毒数据</title>
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/admin_css/main.css">
+    <script type="text/javascript" src="../../static/admin_js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../../static/admin_js/jquery.form.min.js"></script>
+
+</head>
+<body>
+<div class="breadcrub">
+    当前位置：病毒数据管理>病毒数据删除
+</div>
+<div class="form_group">
+    <label>当前删除病毒数据id：{{ virus.id }}</label>
+    <label>名称：{{ virus.title }}</label>
+    <label>分类：{{ virus.category.name }}</label>
+</div>
+
+
+<input type="hidden" name="virus_id" id="virus_id" value="{{ virus.id }}">
+<div class="form_group indent_group line_top">
+    <input type="submit" value="确定删除" class="confirm" onclick="confirm()">
+    <input type="button" value="取消删除" class="cancel" onclick="cancel()">
+</div>
+
+
+</body>
+<script>
+    function getCookie(name) {
+        var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return r ? r[1] : undefined;
+    }
+
+    function confirm() {
+        var virus_id = $('#virus_id').val()
+        // 发起请求
+        // 拼接参数
+        var params = {
+            "virus_id": virus_id,
+        }
+
+        $.ajax({
+            url: '/admin/virus_edit_delete',
+            type: 'POST',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (resp) {
+                //判断是否登陆成功
+                if (resp.errno == '0') {
+                    window.alert("数据删除成功!");
+                    // 返回上一页，刷新数据
+                    location.href = document.referrer;
+                } else {
+                    window.alert(resp.errmsg);
+                }
+            }
+        })
+    }
+
+    // 点击取消，返回上一页
+    function cancel() {
+        history.go(-1)
+    }
+</script>
+</html>

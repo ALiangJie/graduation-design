@@ -12,6 +12,10 @@
 <body>
 <div class="breadcrub">
     当前位置：用户管理>用户列表
+    <form class="news_filter_form">
+        <input type="text" placeholder="请输入关键字" class="input_txt" name="keywords">
+        <input type="submit" value="搜 索" class="input_sub">
+    </form>
 </div>
 <div class="pannel">
     <table class="common_table">
@@ -20,7 +24,6 @@
             <th>电话</th>
             <th>注册时间</th>
             <th>上次登录时间</th>
-            <th>修改信息</th>
             <th>删除信息</th>
         </tr>
 
@@ -31,8 +34,7 @@
                 <td>{{ user.mobile }}</td>
                 <td>{{ user.register }}</td>
                 <td>{{ user.last_login }}</td>
-                <td><a href="" class="edit">修改</a></td>
-                <td><a href="" class="edit">删除</a></td>
+                <td><a href="/admin/user_edit_delete?user_mobile={{ user.mobile }}" class="edit">删除</a></td>
             </tr>
         {% endfor %}
     </table>
