@@ -61,7 +61,7 @@ def virus_edit_delete():
 # 获取/设置病毒数据编辑详情
 # 请求路径: /admin/virus_edit_detail
 # 请求方式: GET, POST
-# 请求参数: GET, virus_id, POST(virus_id,title,digest,content,index_image,category_id)
+# 请求参数: GET, virus_id, POST(virus_id,title,digest,content,category_id)
 # 返回值:GET,渲染virus_edit_detail.html页面,data字典数据, POST(errno,errmsg)
 @admin_blue.route('/virus_edit_detail', methods=['GET', 'POST'])
 def virus_edit_detail():
@@ -73,9 +73,8 @@ def virus_edit_detail():
     5.如果是POST请求,获取参数
     6.参数校验,为空校验
     7.根据病毒数据的编号取出病毒数据对象
-    8.上传病毒数据图片
-    9.设置病毒数据对象的属性
-    10.返回响应
+    8.设置病毒数据对象的属性
+    9.返回响应
     :return:
     """
     # 1.判断请求方式,如果是GET
@@ -129,17 +128,17 @@ def virus_edit_detail():
     if not virus:
         return jsonify(errno=RET.NODATA, errmsg="病毒数据不存在")
 
-    # 9.设置病毒数据对象的属性
+    # 8.设置病毒数据对象的属性
     virus.title = title
     virus.source = source
     virus.content = content
     virus.category_id = category_id
 
-    # 10.返回响应
+    # 9.返回响应
     return jsonify(errno=RET.OK, errmsg="编辑成功")
 
 
-# 病毒数据版式编辑
+# 病毒数据编辑
 # 请求路径: /admin/virus_edit
 # 请求方式: GET
 # 请求参数: GET, p, keywords
@@ -210,8 +209,6 @@ def user_edit_delete():
       4.携带病毒数据数据和分类数据,渲染页面
       5.如果是POST请求,获取参数
       6.参数校验,为空校验
-      7.根据病毒数据的编号取出病毒数据对象
-      8.上传病毒数据图片
       9.设置病毒数据对象的属性
       10.返回响应
       :return:
@@ -231,10 +228,10 @@ def user_edit_delete():
         if not user:
             return render_template("admin/user_list_delete.html", errmsg="该用户不存在")
 
-        # 4.携带病毒数据数据, 渲染页面
+        # 4.携带数据数据, 渲染页面
         return render_template("admin/user_list_delete.html", user=user.to_dict())
 
-    # 5.如果是delete请求,获取参数user_mobile
+    # 5.如果是post请求,获取参数user_mobile
     dict_data = request.json
     user_mobile = dict_data.get("user_mobile")
     # 7.根据用户手机号取出用户数据对象
