@@ -106,7 +106,7 @@ def pass_info():
 # 获取/设置用户基本信息
 # 请求路径: /user/base_info
 # 请求方式:GET,POST
-# 请求参数:POST请求有参数,nick_name,signature,gender
+# 请求参数:nick_name,signature,gender
 # 返回值:errno,errmsg
 @index_blue.route('/base_info', methods=['GET', 'POST'])
 @user_login_data
