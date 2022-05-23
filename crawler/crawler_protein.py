@@ -65,8 +65,10 @@ if __name__ == '__main__':
     headers = {
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     }
-    start_page = 5
-    for page_num in range(start_page, 8):
+
+    start_page = int(input("请输入开始页："))
+    end_page = int(input("请输入结束页："))
+    for page_num in range(start_page, end_page):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno2').click()
         bro.find_element_by_id('pageno2').clear()

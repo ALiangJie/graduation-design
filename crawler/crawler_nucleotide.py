@@ -65,8 +65,13 @@ if __name__ == '__main__':
         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     }
 
-    start_page = 5
-    for page_num in range(start_page, 8):
+    # # 开始爬取数据的页面
+    # start_page = 1
+    # # 爬取页数范围
+    # end_page = 3
+    start_page = int(input("请输入开始页："))
+    end_page = int(input("请输入结束页："))
+    for page_num in range(start_page, end_page):
         # 模拟浏览器换页
         bro.find_element_by_id('pageno').click()
         bro.find_element_by_id('pageno').clear()
@@ -106,6 +111,7 @@ if __name__ == '__main__':
             print("插入第", success_count, "组数据成功！")
             success_count += 1
 
+            # 测试
             # print("名称：" + virus_nucleotide_name, "来源id：" + virus_nucleotide_source)
             # input()
         print("爬取第" + str(page_num) + "页完成！")
