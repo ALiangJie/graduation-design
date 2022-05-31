@@ -33,12 +33,12 @@ if __name__ == '__main__':
 
     # 连接database
     conn = pymysql.connect(
-        host="127.0.0.1",
+        host='localhost',
+        user='root',
+        passwd='123456',
+        database='infoVirus',
         port=3306,
-        user="root",
-        password="123456",
-        database="infoVirus",
-        charset="utf8"
+        charset='utf8',
     )
 
     # 得到一个可以执行SQL语句的光标对象
