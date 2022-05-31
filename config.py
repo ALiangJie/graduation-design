@@ -16,8 +16,8 @@ class Config(object):
     DEBUG = True
     SECRET_KEY = "dwafadwagtrstgrfd"
 
-    # 2.数据库配置信息
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost:3306/infoVirus"
+    # 2.数据库配置信息root@localhost:3306
+    SQLALCHEMY_DATABASE_URI = "mysql://root:123456@localhost:3306/infoVirus"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True  # 每当改变数据的内容之后，在视图函数结束时都会自动提交
 

@@ -8,8 +8,6 @@ from selenium.webdriver.chrome.options import Options
 # 实现规避检测
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
-import os
-from Bio import Entrez
 
 
 def set_option():
